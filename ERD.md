@@ -2,7 +2,7 @@
 
 ## Entity Relationship Diagram
 
-**Version 1.0 | December 2024**
+**Version 1.0 | December 2025**
 
 -----
 
@@ -416,6 +416,6 @@ Audit log of all system activities.
 -----
 
 **Document Version**: 1.0  
-**Last Updated**: December 21, 2024  
-**Authors**: Systems Network Monitor Development Team  
-**Contact**: erd@yourcompany.com
+**Last Updated**: December 21, 2025  
+**Authors**: rsl37  
+**Contact**: roselleroberts@pm.me
