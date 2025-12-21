@@ -2,7 +2,7 @@
 
 ## Technical Whitepaper
 
-**Version 1.0 | December 2024**
+**Version 1.0 | December 2025**
 
 -----
 
@@ -398,6 +398,6 @@ The COFM methodology, in particular, shows how multiple project management forma
 -----
 
 **Document Version**: 1.0  
-**Last Updated**: December 21, 2024  
-**Authors**: Systems Network Monitor Development Team  
-**Contact**: whitepaper@yourcompany.com
+**Last Updated**: December 21, 2025  
+**Authors**: rsl37
+**Contact**: roselleroberts@pm.me
