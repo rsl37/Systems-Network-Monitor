@@ -87,9 +87,9 @@ A **permitted purpose** is any noncommercial purpose. **Noncommercial purposes**
 
 ### Required Notice
 
-**Copyright 2024 [Your Company Name]**  
-**Project**: Systems Network Monitor (SNM)  
-**Website**: https://github.com/yourusername/systems-network-monitor
+**Copyright 2025 [Your Company Name]**  
+**Project**: Systems Network Monitor
+**Website**: https://github.com/rsl37/systems-network-monitor
 
 ### Noncommercial Use Examples
 
@@ -170,10 +170,6 @@ We welcome noncommercial contributions to SNM! By submitting a pull request, you
 1. You license your contribution under the same terms as this project
 1. Your contribution does not violate any third-party rights
 
-### Trademark Notice
-
-“Systems Network Monitor” and “SNM” are trademarks of [Your Company Name]. Use of these trademarks is subject to our trademark policy and does not grant trademark rights.
-
 -----
 
 ## Frequently Asked Questions
@@ -200,12 +196,12 @@ No, that is commercial use and requires a commercial license.
 
 ### What if I’m unsure whether my use is commercial?
 
-When in doubt, contact us at licensing@yourcompany.com. We’re happy to clarify!
+When in doubt, contact us at roselleroberts@pm.me. We’re happy to clarify!
 
 -----
 
 ## Questions?
 
-For licensing questions, please contact: licensing@yourcompany.com
+For licensing questions, please contact: roselleroberts@pm.me
 
-For general questions, visit: https://github.com/yourusername/systems-network-monitor/discussions
+For general questions, visit: https://github.com/rsl37/systems-network-monitor/discussions
