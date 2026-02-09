@@ -93,7 +93,7 @@ Real-time WebSocket integration, multi-user collaboration, advanced analytics, m
 ### Version 3.0 (Q4 2025)
 Enterprise SSO, custom plugins, multi-tenant architecture, advanced COFM customization, Kubernetes deployment
 
-For detailed information on institutional technologies (smart contracts, tokenized incentives, soulbound credentials, polycentric governance), see WHITEPAPER.md section 9.4.
+For detailed information on institutional technologies (smart contracts, tokenized incentives, soulbound credentials, polycentric governance), see the institutional technologies discussion in WHITEPAPER.md (Future Directions section).
 
 -----
 
