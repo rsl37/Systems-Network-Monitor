@@ -48,10 +48,10 @@ Scheduling flexibility for non-critical tasks. In COFM, shown as light blue node
 System managing aircraft movement through controlled airspace and on airport surfaces.
 
 **Tower**  
-Airport traffic control facility managing aircraft within approximately five-mile radius of airport.
+Airport traffic control facility managing aircraft within an approximately five-mile radius of an airport.
 
 **TRACON (Terminal Radar Approach Control)**  
-Facility controlling aircraft approaching and departing major airports, typically within thirty to fifty mile radius.
+Facility controlling aircraft approaching and departing major airports, typically within a thirty- to fifty-mile radius.
 
 **Center**  
 Air route traffic control center managing high-altitude en route traffic over large geographic regions.
