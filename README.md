@@ -56,7 +56,7 @@ npm run serve    # Serve locally
 
 ## Repository Structure
 
-Source code is organized into React components, data schemas, utilities, and type definitions. See WHITEPAPER.md section 2.2 for the complete component architecture diagram.
+Source code is organized into React components, data schemas, utilities, and type definitions. See WHITEPAPER.md for the complete component architecture diagram.
 
 ## Use Cases
 
