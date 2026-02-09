@@ -68,7 +68,7 @@ For detailed scenarios with operator workflows and response times, see WHITEPAPE
 
 ## Contributing
 
-See CONTRIBUTING.md for code standards, pull request process, issue reporting, and development setup guidelines.
+Contributions are welcome. Please follow the existing code style, write tests where applicable, open a pull request with a clear description, and use GitHub Issues to report bugs or request features.
 
 ## Licensing
 
