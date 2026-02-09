@@ -42,7 +42,7 @@ For installation and quick start instructions, see README.md. For data model sch
 
 The application shell contains a system type selector (Supply Chain or ATC toggle), with a main view panel offering topology, list, metrics, and COFM views alongside search and filter controls. A sidebar panel displays selected node details, active alerts, and quick actions. User interactions trigger state updates that generate re-renders, visual updates, and alert generation feeding the recommendation engine.
 
-For detailed component hierarchy and data flow diagrams, see the original section 2.2 and 2.3.
+Detailed component hierarchy and data flow are documented using architecture diagrams that map interactions between the main view, sidebar, and data layer.
 
 -----
 
