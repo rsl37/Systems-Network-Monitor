@@ -1,6 +1,4 @@
-# Systems Network Monitor (SNM)
-
-## Entity Relationship Diagram
+# Systems Network Monitor - Entity Relationship Diagram
 
 **Version 1.0 | December 2025**
 
@@ -8,7 +6,9 @@
 
 ## Overview
 
-This document describes the data model and relationships for Systems Network Monitor. The current version (1.0) uses in-memory state management, but this ERD provides the foundation for future database-backed implementations.
+This document defines the data model and entity relationships for Systems Network Monitor. Current version (v1.0) uses in-memory state management, but this ERD provides the foundation for future database-backed implementations.
+
+For architectural context, see WHITEPAPER.md. For term definitions, see GLOSSARY.md.
 
 -----
 

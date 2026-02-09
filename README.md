@@ -1,208 +1,100 @@
-# Systems-Network-Monitor
-Dashboard Monitor for Monitoring the Health, Functions, &amp; Stability of Complex/Interconnected Systems and their Structures/Networks
-# Systems Network Monitor (SNM)
+# Systems Network Monitor
 
 [![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/License-PolyForm%20Shield-blue.svg)](LICENSE-SHIELD.md)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg)](LICENSE-NONCOMMERCIAL.md)
 [![React](https://img.shields.io/badge/React-18.x-61dafb.svg)](https://reactjs.org/)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
 
-**Real-time monitoring and management platform for complex networked ecosystems**
+Real-time monitoring platform for managing complex networked systems including supply chains and Air Traffic Control facilities.
 
-Systems Network Monitor (SNM) is a comprehensive web-based application designed to help human operators manage the overwhelming complexity of large-scale supply chain networks and Air Traffic Control (ATC) systems. By combining real-time monitoring, intelligent alerting, and advanced visualization (including COFM - Complexly Organized Flexibly Manageable graphs), SNM provides operators with actionable insights for maintaining system health and coordinating emergency responses.
+## Overview
 
-![SNM Dashboard](docs/images/snm-dashboard-preview.png)
+Systems Network Monitor helps operators manage large-scale networked systems through real-time monitoring, intelligent alerting, and advanced visualization. The platform supports two primary ecosystems:
 
-## 🎯 Key Features
+- **Supply Chain Networks** - Suppliers, manufacturers, distributors, warehouses, and retail endpoints
+- **Air Traffic Control** - Tower controls, TRACONs, and center facilities
 
-### **Dual Ecosystem Support**
+Core capabilities include live status tracking, topology visualization, severity-based alerting, maintenance management, AI recommendations, and performance analytics. For complete technical details, see [WHITEPAPER.md](WHITEPAPER.md).
 
-- **Supply Chain Networks**: Monitor suppliers, manufacturers, distributors, warehouses, and retail endpoints
-- **Air Traffic Control**: Track tower controls, TRACONs, and center facilities with real-time flight data
-
-### **Core Capabilities**
-
-- 🔴 **Real-Time Monitoring**: Live status tracking with health indicators (Healthy/Warning/Critical)
-- 📊 **Multiple View Modes**: Topology, List, and Metrics visualizations
-- 🎨 **COFM Visualization**: Unified WBS+PERT+Gantt+Scatterplot graph for project management
-- ⚠️ **Intelligent Alerting**: Severity-based alerts with actionable responses
-- 🔧 **Maintenance Management**: Schedule and track system maintenance windows
-- 🤖 **AI-Powered Recommendations**: Load balancing and route optimization suggestions
-- 🔍 **Search & Filter**: Real-time node filtering by status and location
-- 📈 **Performance Analytics**: Uptime tracking, throughput analysis, and trend visualization
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
-- Node.js 16.x or higher
-- npm 8.x or higher (or yarn 1.22.x)
+- Node.js 16+ and npm 8+ (or yarn 1.22+)
 - Modern web browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
 
 ### Installation
 
+Clone the repository, install dependencies, and start the development server:
+
 ```bash
-# Clone the repository
 git clone https://github.com/yourusername/systems-network-monitor.git
 cd systems-network-monitor
-
-# Install dependencies
 npm install
-
-# Start development server
 npm start
 ```
 
-The application will open at `http://localhost:3000`
+Application opens at `http://localhost:3000`
 
 ### Production Build
 
 ```bash
-# Create optimized production build
-npm run build
-
-# Serve production build locally
-npm run serve
+npm run build    # Create optimized build
+npm run serve    # Serve locally
 ```
 
-## 📖 Documentation
+### System Requirements
 
-- [**Whitepaper**](docs/WHITEPAPER.md) - Technical architecture and design philosophy
-- [**Entity Relationship Diagram**](docs/ERD.md) - Data model and relationships
-- [**User Guide**](docs/USER_GUIDE.md) - Comprehensive usage instructions
-- [**API Documentation**](docs/API.md) - Integration and extension guide
-- [**COFM Specification**](docs/COFM.md) - Detailed COFM graph methodology
+**Minimum**: 4GB RAM, 1280x720 display, stable internet  
+**Recommended**: 8GB RAM, 1920x1080 display, dedicated GPU, low-latency network
 
-## 🏗️ Repository Structure
+## Documentation
 
-```
-systems-network-monitor/
-├── src/
-│   ├── components/          # React components
-│   │   ├── Dashboard/       # Dashboard view components
-│   │   ├── Topology/        # Network topology visualization
-│   │   ├── COFM/           # COFM graph components
-│   │   ├── Alerts/         # Alert panel and management
-│   │   └── NodeDetails/    # Node detail panels
-│   ├── data/               # Sample data and schemas
-│   ├── hooks/              # Custom React hooks
-│   ├── utils/              # Utility functions
-│   ├── types/              # TypeScript type definitions
-│   └── App.jsx             # Main application component
-├── public/                 # Static assets
-├── docs/                   # Documentation
-│   ├── images/            # Screenshots and diagrams
-│   ├── WHITEPAPER.md      # Technical whitepaper
-│   ├── ERD.md             # Entity Relationship Diagram
-│   └── USER_GUIDE.md      # User documentation
-├── tests/                  # Test suites
-├── LICENSE-SHIELD.md       # PolyForm Shield License
-├── LICENSE-NONCOMMERCIAL.md # PolyForm Noncommercial License
-├── package.json
-└── README.md
-```
+- **[WHITEPAPER.md](WHITEPAPER.md)** - Complete technical architecture, COFM methodology, design philosophy, and use cases
+- **[ERD.md](ERD.md)** - Data model schemas and entity relationships
+- **[GLOSSARY.md](GLOSSARY.md)** - Canonical definitions for all technical terms
 
-## 🎨 COFM Visualization
+## Repository Structure
 
-SNM includes an innovative **COFM (Complexly Organized Flexibly Manageable)** graph that compresses four traditional project management methodologies into a single unified visualization:
+Source code is organized into React components, data schemas, utilities, and type definitions. See WHITEPAPER.md for the complete component architecture diagram.
 
-- **WBS (Work Breakdown Structure)** - Hierarchy as Z-axis/node size
-- **PERT (Program Evaluation Review Technique)** - Critical path as red lines
-- **Gantt Chart** - Timeline as X-axis
-- **Scatterplot** - Resources as Y-axis
+## Use Cases
 
-This compression allows operators to extract multiple insights from a single view while maintaining clarity and actionability.
+**Supply Chain Management**: End-to-end visibility, shipment tracking, bottleneck identification, distributed maintenance coordination
 
-## Design Philosophy
+**Air Traffic Control**: Airspace management, facility monitoring, flight handoff coordination, emergency response, weather impact assessment
 
-SNM is built on a unified principle: **a viable system couples every act of extraction to an act of replenishment through feedback loops maintained as infrastructure, not as afterthoughts.** The monitoring, alerting, and governance layers in SNM are designed to make this feedback structural—encoded in the architecture so that operating within the system *is* participating in its health. Smart contracts, tokenized incentives, soulbound credentials, and polycentric governance models inform the roadmap as institutional technologies capable of making these feedback loops permanent, verifiable, and scale-invariant.
+For detailed scenarios with operator workflows and response times, see WHITEPAPER.md section 8.
 
-## 🔐 Use Cases
+## Contributing
 
-### Supply Chain Management
+Contributions are welcome. Please follow the existing code style, write tests where applicable, open a pull request with a clear description, and use GitHub Issues to report bugs or request features.
 
-- Monitor end-to-end supply chain visibility
-- Track shipments across multiple nodes
-- Identify bottlenecks and optimize routing
-- Coordinate maintenance across distributed facilities
-- Generate compliance and performance reports
-
-### Air Traffic Control
-
-- Real-time airspace management
-- Monitor tower, TRACON, and center facilities
-- Track flight handoffs and communications
-- Coordinate emergency responses
-- Weather impact assessment
-
-## 📊 System Requirements
-
-### Minimum Requirements
-
-- 4GB RAM
-- Modern browser with JavaScript enabled
-- 1280x720 display resolution
-- Stable internet connection (for real-time updates)
-
-### Recommended Requirements
-
-- 8GB+ RAM
-- 1920x1080+ display resolution
-- Dedicated GPU for complex visualizations
-- Low-latency network connection
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
-
-- Code style and standards
-- Pull request process
-- Issue reporting
-- Development setup
-
-## 📄 Licensing
+## Licensing
 
 This project is dual-licensed:
 
-1. **[PolyForm Shield License 1.0.0](LICENSE-SHIELD.md)** - Allows use and modification with restrictions on competing uses
-1. **[PolyForm Noncommercial License 1.0.0](LICENSE-NONCOMMERCIAL.md)** - Allows noncommercial use and modification
+1. **[PolyForm Shield License 1.0.0](LICENSE-SHIELD.md)** - Use and modification with restrictions on competing uses
+2. **[PolyForm Noncommercial License 1.0.0](LICENSE-NONCOMMERCIAL.md)** - Noncommercial use and modification
 
-**For commercial licensing inquiries**, please contact: [licensing@yourcompany.com](mailto:licensing@yourcompany.com)
+For commercial licensing: licensing@yourcompany.com
 
-## 🙏 Acknowledgments
+## Contact
 
-- React team for the excellent framework
-- Lucide for the icon library
-- Contributors and beta testers
-- Systems engineering community for feedback
+- Issues and discussions: GitHub Issues and Discussions
+- Email: support@yourcompany.com
+- Documentation: docs.yourcompany.com
 
-## 📧 Contact & Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/systems-network-monitor/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/systems-network-monitor/discussions)
-- **Email**: support@yourcompany.com
-- **Documentation**: [docs.yourcompany.com](https://docs.yourcompany.com)
-
-## 🗺️ Roadmap
+## Roadmap
 
 ### Version 2.0 (Q2 2025)
-
-- [ ] Real-time WebSocket integration
-- [ ] Multi-user collaboration features
-- [ ] Advanced analytics dashboard
-- [ ] Mobile app (iOS/Android)
-- [ ] Machine learning predictive maintenance
+Real-time WebSocket integration, multi-user collaboration, advanced analytics, mobile apps, ML predictive maintenance
 
 ### Version 3.0 (Q4 2025)
+Enterprise SSO, custom plugins, multi-tenant architecture, advanced COFM customization, Kubernetes deployment
 
-- [ ] Enterprise SSO integration
-- [ ] Custom plugin system
-- [ ] Multi-tenant architecture
-- [ ] Advanced COFM customization
-- [ ] Kubernetes deployment support
+For detailed information on institutional technologies (smart contracts, tokenized incentives, soulbound credentials, polycentric governance), see the institutional technologies discussion in WHITEPAPER.md (Future Directions section).
 
 -----
 
-**Made with ❤️ for systems operators managing complex networks**
-
-*Systems Network Monitor - Making complexity manageable*
+Made with care for systems operators managing complex networks
