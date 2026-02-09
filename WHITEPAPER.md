@@ -1,6 +1,4 @@
-# Systems Network Monitor (SNM)
-
-## Technical Whitepaper
+# Systems Network Monitor - Technical Whitepaper
 
 **Version 1.0 | December 2025**
 
@@ -8,92 +6,43 @@
 
 ## Abstract
 
-Modern supply chain networks and Air Traffic Control (ATC) systems have become so complex that human operators struggle to maintain situational awareness and respond effectively to critical events. Systems Network Monitor (SNM) addresses this challenge by providing a unified real-time monitoring platform that combines intelligent alerting, multi-dimensional visualization, and decision support. This whitepaper details the technical architecture, design philosophy, and innovative COFM (Complexly Organized Flexibly Manageable) visualization methodology that enables operators to manage overwhelming complexity.
+Modern supply chain networks and Air Traffic Control systems exceed human cognitive capacity for situational awareness under time pressure. Systems Network Monitor addresses this challenge through unified real-time monitoring, intelligent alerting, multi-dimensional visualization, and decision support. This whitepaper details the technical architecture, COFM visualization methodology, and design philosophy enabling operators to manage overwhelming complexity.
 
 -----
 
-## 1. Introduction
+## 1. Problem and Solution
 
-### 1.1 Problem Statement
+### The Challenge
 
-Complex networked systems face three fundamental challenges:
+Complex networked systems face three fundamental obstacles:
 
-1. **Information Overload**: Operators receive thousands of data points per minute from distributed nodes
-1. **Hidden Dependencies**: Critical relationships between nodes are obscured in traditional monitoring tools
-1. **Response Paralysis**: Alert fatigue and unclear priorities delay critical decisions
+1. **Information Overload** - Thousands of data points per minute from distributed nodes
+2. **Hidden Dependencies** - Critical relationships obscured in traditional monitoring tools
+3. **Response Paralysis** - Alert fatigue and unclear priorities delay critical decisions
 
-Traditional monitoring solutions present data in siloed views (topology diagrams, performance charts, alert lists), forcing operators to mentally integrate information across multiple screens under time pressure.
+Traditional monitoring tools present data in isolated views (topology diagrams, performance charts, alert lists), forcing operators to mentally integrate information across multiple screens under time pressure.
 
-### 1.2 Solution Overview
+### The Solution
 
-SNM unifies monitoring, visualization, and decision support into a single coherent interface:
+SNM unifies monitoring, visualization, and decision support into a coherent interface with real-time aggregation, intelligent prioritization, multi-view visualization, COFM graphs, and contextual actions that guide operators through diagnostics and remediation.
 
-- **Real-time aggregation** of node status, performance metrics, and dependencies
-- **Intelligent prioritization** of alerts by severity and impact
-- **Multi-view visualization** (topology, list, metrics) with seamless transitions
-- **COFM graphs** that compress WBS, PERT, Gantt, and Scatterplot methodologies
-- **Contextual actions** that guide operators through diagnostics and remediation
+For installation and quick start instructions, see README.md. For data model schemas, see ERD.md. For term definitions, see GLOSSARY.md.
 
 -----
 
 ## 2. System Architecture
 
-### 2.1 Technology Stack
+### Technology Stack
 
-**Frontend**
+**Frontend**: React 18 with functional components and hooks, Lucide React iconography, SVG rendering, CSS3  
+**Data Layer**: In-memory state management (React useState/useEffect). Future: WebSocket for real-time, REST API for persistence  
+**Deployment**: Static site generation for edge deployment, CDN distribution, container-ready (Docker/Kubernetes)
 
-- React 18.x with functional components and hooks
-- Lucide React for consistent iconography
-- SVG for high-fidelity graph rendering
-- CSS3 with Tailwind-inspired utilities
+### Component Architecture
 
-**Data Layer**
+The application shell contains a system type selector (Supply Chain or ATC toggle), with a main view panel offering topology, list, metrics, and COFM views alongside search and filter controls. A sidebar panel displays selected node details, active alerts, and quick actions. User interactions trigger state updates that generate re-renders, visual updates, and alert generation feeding the recommendation engine.
 
-- In-memory state management (React useState/useEffect)
-- Future: WebSocket integration for real-time updates
-- Future: REST API for persistence and multi-user sync
-
-**Deployment**
-
-- Static site generation for edge deployment
-- CDN distribution for low-latency global access
-- Container-ready architecture (Docker/Kubernetes)
-
-### 2.2 Component Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Application Shell                        │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │              System Type Selector                     │  │
-│  │         (Supply Chain / ATC Toggle)                   │  │
-│  └───────────────────────────────────────────────────────┘  │
-│  ┌─────────────────────────┬─────────────────────────────┐  │
-│  │   Main View Panel       │   Sidebar Panel             │  │
-│  │  ┌──────────────────┐   │  ┌──────────────────────┐  │  │
-│  │  │ Topology View    │   │  │ Selected Node        │  │  │
-│  │  │ List View        │   │  │ Details              │  │  │
-│  │  │ Metrics View     │   │  └──────────────────────┘  │  │
-│  │  │ COFM View        │   │  ┌──────────────────────┐  │  │
-│  │  └──────────────────┘   │  │ Active Alerts        │  │  │
-│  │                          │  │ Panel                │  │  │
-│  │  ┌──────────────────┐   │  └──────────────────────┘  │  │
-│  │  │ Search & Filter  │   │  ┌──────────────────────┐  │  │
-│  │  │ Controls         │   │  │ Quick Actions        │  │  │
-│  │  └──────────────────┘   │  └──────────────────────┘  │  │
-│  └─────────────────────────┴─────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 2.3 Data Flow
-
-```
-User Interaction → State Update → Re-render → Visual Update
-                      ↓
-                 Alert Generation
-                      ↓
-              Recommendation Engine
-```
+For detailed component hierarchy and data flow diagrams, see the original section 2.2 and 2.3.
 
 -----
 
@@ -152,182 +101,62 @@ This compression is why COFM “feels hard to teach” but “gives multiple ins
 
 -----
 
+
 ## 4. Network Node Model
 
-### 4.1 Supply Chain Node Schema
+Node schemas define the structure for supply chain and ATC entities. Supply Chain nodes include suppliers, manufacturers, distributors, warehouses, and retail endpoints with metrics tracking uptime, throughput, latency, and inventory. ATC nodes include towers, TRACONs, and centers with metrics for uptime, aircraft capacity, frequency, and active flights.
 
-```typescript
-interface SupplyChainNode {
-  id: string;              // Unique identifier (e.g., "SC001")
-  name: string;            // Human-readable name
-  type: 'supplier' | 'manufacturer' | 'distributor' | 'warehouse' | 'retail';
-  status: 'healthy' | 'warning' | 'critical';
-  location: string;        // Geographic location
-  connections: string[];   // Array of connected node IDs
-  metrics: {
-    uptime: number;        // Percentage (0-100)
-    throughput: number;    // Units per hour
-    latency: number;       // Milliseconds
-  };
-  inventory: number;       // Current inventory level
-}
-```
-
-### 4.2 ATC Node Schema
-
-```typescript
-interface ATCNode {
-  id: string;              // Unique identifier (e.g., "ATC001")
-  name: string;            // Facility name
-  type: 'tower' | 'tracon' | 'center';
-  status: 'healthy' | 'warning' | 'critical';
-  location: string;        // Geographic location
-  connections: string[];   // Array of connected facility IDs
-  metrics: {
-    uptime: number;        // Percentage (0-100)
-    aircraft: number;      // Total capacity
-    frequency: string;     // Radio frequency (MHz)
-  };
-  activeFlights: number;   // Current active flights
-}
-```
+For complete schema definitions with field types and constraints, see ERD.md sections on Node, NodeMetrics, and NodeConnection entities.
 
 -----
 
 ## 5. Alert Intelligence System
 
-### 5.1 Alert Generation Logic
+Alerts are generated based on node status and metrics. Critical alerts trigger when node status equals critical, uptime falls below ninety percent, throughput degradation exceeds fifty percent, or communication failures occur. Warning alerts activate for warning status nodes, uptime between ninety and ninety-seven percent, latency spikes above one hundred milliseconds, or approaching capacity thresholds. Info alerts announce scheduled maintenance, weather advisories, and system updates.
 
-Alerts are generated based on node status and metrics:
+Alert prioritization uses the formula: Priority Score equals Severity Weight multiplied by Impact Factor multiplied by Time Decay, where Severity Weight assigns Critical equals ten, Warning equals five, and Info equals one, Impact Factor counts dependent nodes, and Time Decay favors newer alerts.
 
-**Critical Alerts**
+Each alert provides contextual actions: Investigate (opens diagnostic data), Acknowledge (reduces noise), Escalate (routes to on-call team), and Resolve (closes with notes).
 
-- Node status = ‘critical’
-- Uptime < 90%
-- Throughput degradation > 50%
-- Communication failures
-
-**Warning Alerts**
-
-- Node status = ‘warning’
-- Uptime 90-97%
-- Latency spikes > 100ms
-- Approaching capacity thresholds
-
-**Info Alerts**
-
-- Scheduled maintenance
-- Weather advisories
-- System updates
-
-### 5.2 Alert Prioritization
-
-```
-Priority Score = (Severity Weight) × (Impact Factor) × (Time Decay)
-
-where:
-  Severity Weight: Critical=10, Warning=5, Info=1
-  Impact Factor: Number of dependent nodes
-  Time Decay: Age of alert (newer = higher priority)
-```
-
-### 5.3 Alert Actions
-
-Each alert provides contextual actions:
-
-- **Investigate**: Opens node details with diagnostic data
-- **Acknowledge**: Marks alert as seen (reduces noise)
-- **Escalate**: Routes to on-call team
-- **Resolve**: Closes alert with resolution notes
+For alert data schemas and action tracking, see ERD.md sections on Alert and AlertAction entities.
 
 -----
 
 ## 6. Performance Optimization
 
-### 6.1 Rendering Optimization
+**Rendering**: SVG nodes rendered as circles with event handlers, lines updated only on data change, React.memo for complex components, debounced search and filter
 
-**SVG Graph Rendering**
+**State Management**: Minimal re-renders via targeted useState hooks, alert generation limited to system type changes, lazy loading of node details
 
-- Nodes rendered as SVG circles with event handlers
-- Lines rendered once, updated only on data change
-- Use of React.memo for complex components
-- Debounced search and filter operations
+**Current Limits (v1.0)**: One hundred nodes per network, fifty simultaneous alerts, ten COFM projects in memory
 
-**State Management**
-
-- Minimal re-renders via targeted useState hooks
-- Alert generation limited to system type changes
-- Lazy loading of node details on selection
-
-### 6.2 Scalability Considerations
-
-**Current Limits (v1.0)**
-
-- Up to 100 nodes per network
-- 50 simultaneous alerts
-- 10 COFM projects in memory
-
-**Future Optimization (v2.0)**
-
-- Virtual scrolling for large node lists
-- WebWorker for background processing
-- IndexedDB for local caching
-- Server-side rendering for initial load
+**Future Optimization (v2.0)**: Virtual scrolling for large lists, WebWorker for background processing, IndexedDB caching, server-side rendering
 
 -----
 
-## 7. Security & Access Control
+## 7. Security and Access Control
 
-### 7.1 Current Implementation
+**Current Implementation**: SNM v1.0 deploys behind corporate VPN or SSO with no authentication, no data persistence (stateless client), and no external API calls (offline-capable).
 
-SNM v1.0 is designed for internal deployment:
-
-- No authentication (deploy behind corporate VPN/SSO)
-- No data persistence (stateless client)
-- No external API calls (offline-capable)
-
-### 7.2 Future Enterprise Features
-
-**Version 2.0 Roadmap**
-
-- OAuth2/OIDC integration
-- Role-based access control (RBAC)
-- Audit logging
-- Encrypted WebSocket connections
-- Multi-tenant data isolation
+**Future Enterprise Features (v2.0)**: OAuth2 or OIDC integration, role-based access control, audit logging, encrypted WebSocket connections, multi-tenant data isolation
 
 -----
 
 ## 8. Use Case Scenarios
 
-### 8.1 Supply Chain: Critical Node Failure
+### Supply Chain: Critical Node Failure
 
 **Scenario**: A manufacturing plant goes offline due to power outage.
 
-**SNM Response**:
+**SNM Response**: Node status changes to critical (red), alert generated for severe throughput degradation, operator investigates node details, diagnostics reveal power issue, operator contacts support creating a ticket, COFM view shows critical path impact, AI recommends rerouting production to alternate plant.
 
-1. Node status immediately changes to ‘critical’ (red)
-1. Alert generated: “Severe throughput degradation”
-1. Operator clicks “Investigate” → sees node details
-1. Quick Actions: “Run Diagnostics” reveals power issue
-1. Operator clicks “Contact Support” → creates ticket
-1. COFM view shows impact on critical path
-1. AI Recommendation: “Reroute production to Plant 2”
+**Outcome**: Fifteen-minute response time versus forty-five minutes with traditional tools.
 
-**Outcome**: 15-minute response time vs. 45 minutes with traditional tools.
-
-### 8.2 ATC: Traffic Overload
+### Air Traffic Control: Traffic Overload
 
 **Scenario**: Las Vegas TRACON approaches capacity during holiday weekend.
 
-**SNM Response**:
-
-1. Node status changes to ‘warning’ (yellow)
-1. Alert generated: “Increased traffic load - 67 aircraft (near capacity)”
-1. Operator views topology map showing congestion
-1. Metrics view reveals 97.3% uptime with spikes
-1. AI Recommendation: “Alternate flight paths available”
-1. Operator coordinates with adjacent facilities
+**SNM Response**: Node status changes to warning (yellow), alert generated for increased traffic load showing sixty-seven aircraft near capacity, operator views topology showing congestion, metrics reveal ninety-seven point three percent uptime with spikes, AI recommends alternate flight paths, operator coordinates with adjacent facilities.
 
 **Outcome**: Proactive load distribution prevents critical failure.
 
@@ -335,59 +164,40 @@ SNM v1.0 is designed for internal deployment:
 
 ## 9. Future Directions
 
-### 9.1 Machine Learning Integration
+### Machine Learning Integration
 
-**Predictive Maintenance**
+**Predictive Maintenance**: Anomaly detection on node metrics, failure prediction with forty-eight hour warning, automated maintenance scheduling
 
-- Anomaly detection on node metrics
-- Failure prediction (48-hour warning)
-- Automated maintenance scheduling
+**Intelligent Routing**: Real-time optimization using historical patterns, traffic prediction models, dynamic load balancing
 
-**Intelligent Routing**
+### Extended Ecosystem Support
 
-- Real-time optimization using historical patterns
-- Traffic prediction models
-- Dynamic load balancing
+Planned integrations include power grid management, telecommunications networks, healthcare supply chains, and emergency services coordination.
 
-### 9.2 Extended Ecosystem Support
+### Advanced Visualization
 
-**Planned Integrations**
+**Three-Dimensional Topology**: WebGL rendering for large-scale networks, VR and AR support for immersive monitoring, real-time animation of flow and traffic
 
-- Power grid management
-- Telecommunications networks
-- Healthcare supply chains
-- Emergency services coordination
+### Systems Governance and Institutional Infrastructure
 
-### 9.3 Advanced Visualization
+A unified principle emerges across every scale of networked system design: A viable system couples every act of extraction to an act of replenishment through feedback loops maintained as infrastructure, not afterthoughts.
 
-**3D Topology View**
-
-- WebGL rendering for large-scale networks
-- VR/AR support for immersive monitoring
-- Real-time animation of flow/traffic
-
-### 9.4 Systems Governance & Institutional Infrastructure
-
-A unified principle emerges across every scale of networked system design:
-
-> *A viable system is one in which every act of extraction is coupled to an act of replenishment, mediated by a feedback loop that is maintained as infrastructure, not as an afterthought.*
-
-The critical gap in systems governance is the **institutional infrastructure** that makes feedback loops non-optional. In well-functioning systems—whether supply chains, air traffic networks, or ecological partnerships—reciprocal feedback is embedded practice, as automatic as breathing. System degradation follows a consistent pattern: the feedback loop exists, is understood, and is then dismantled because short-term extraction is more immediately rewarding than long-term reciprocity.
+The critical gap in systems governance is the institutional infrastructure making feedback loops non-optional. In well-functioning systems, reciprocal feedback is embedded practice, automatic as breathing. System degradation follows a consistent pattern: the feedback loop exists, is understood, then dismantles because short-term extraction rewards more immediately than long-term reciprocity.
 
 **The Design Challenge**
 
-The design challenge for SNM and systems like it is to make feedback *structural*: encoded in the architecture itself, so that participation in the system **is** participation in the feedback loop, and value cannot be extracted without simultaneously contributing to the system's regenerative capacity.
+The design challenge for SNM and similar systems is making feedback structural: encoded in the architecture itself, so that participation in the system equals participation in the feedback loop, and value cannot be extracted without simultaneously contributing to regenerative capacity.
 
 **Emerging Institutional Technologies**
 
-Several emerging technologies offer the potential to make governance feedback loops permanent, verifiable, and scale-invariant:
+Several emerging technologies offer potential to make governance feedback loops permanent, verifiable, and scale-invariant:
 
 - **Smart Contracts**: Automated enforcement of reciprocal obligations between network participants
 - **Tokenized Incentives**: Aligning individual node behavior with overall system health through programmatic rewards
 - **Soulbound Credentials**: Non-transferable attestations of maintenance compliance, operational history, and stewardship
-- **Polycentric Governance**: Distributed decision-making structures that prevent single points of governance failure
+- **Polycentric Governance**: Distributed decision-making structures preventing single points of governance failure
 
-These are not merely features—they represent a first generation of institutional technology capable of embedding reciprocal feedback as a permanent, verifiable property of networked systems.
+These represent a first generation of institutional technology capable of embedding reciprocal feedback as a permanent, verifiable property of networked systems.
 
 -----
 
@@ -395,36 +205,25 @@ These are not merely features—they represent a first generation of institution
 
 Systems Network Monitor demonstrates that complex networked ecosystems can be managed through thoughtful information design, intelligent prioritization, and compressed visualization techniques. By reducing cognitive load and providing actionable insights, SNM empowers human operators to make better decisions faster.
 
-The COFM methodology, in particular, shows how multiple project management formalisms can be unified without loss of information - a principle applicable beyond SNM to any domain requiring multi-dimensional decision-making under time pressure.
+The COFM methodology shows how multiple project management formalisms can be unified without information loss - a principle applicable beyond SNM to any domain requiring multi-dimensional decision-making under time pressure.
 
 ### The Unified Template
 
-Across every domain SNM addresses, a single design principle holds at every scale: **every act of extraction must be coupled to an act of replenishment, mediated by a feedback loop maintained as infrastructure.** The monitoring, alerting, and governance systems described in this paper are not supplementary features—they are the institutional infrastructure that makes reciprocity non-optional. When feedback mechanisms are treated as afterthoughts rather than architecture, system degradation follows a predictable trajectory: the loop exists, is understood, is dismantled for short-term gain, and—once past the tipping point—the resulting breakage is irreversible. SNM exists to ensure that the feedback loop remains visible, actionable, and structurally embedded before that tipping point is reached. That is the urgency.
+Across every domain SNM addresses, a single design principle holds at every scale: every act of extraction must be coupled to an act of replenishment, mediated by a feedback loop maintained as infrastructure. The monitoring, alerting, and governance systems described in this paper are not supplementary features - they are the institutional infrastructure making reciprocity non-optional. When feedback mechanisms are treated as afterthoughts rather than architecture, system degradation follows a predictable trajectory: the loop exists, is understood, is dismantled for short-term gain, and once past the tipping point, the resulting breakage is irreversible. SNM exists to ensure that the feedback loop remains visible, actionable, and structurally embedded before that tipping point is reached. That is the urgency.
 
 -----
 
 ## References
 
 1. Tufte, E. (1990). *Envisioning Information*. Graphics Press.
-1. Card, S., Mackinlay, J., Shneiderman, B. (1999). *Readings in Information Visualization*. Morgan Kaufmann.
-1. Norman, D. (2013). *The Design of Everyday Things*. Basic Books.
-1. Shneiderman, B. (1996). “The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations.” *IEEE Symposium on Visual Languages*.
-1. Kolmogorov, A. (1965). “Three approaches to the quantitative definition of information.” *Problems of Information Transmission*.
-
------
-
-## Appendix A: Glossary
-
-- **COFM**: Complexly Organized Flexibly Manageable - unified project visualization
-- **PERT**: Program Evaluation and Review Technique
-- **WBS**: Work Breakdown Structure
-- **TRACON**: Terminal Radar Approach Control
-- **Node**: Individual entity in network (supplier, tower, etc.)
-- **Critical Path**: Sequence of dependent tasks determining minimum project duration
+2. Card, S., Mackinlay, J., Shneiderman, B. (1999). *Readings in Information Visualization*. Morgan Kaufmann.
+3. Norman, D. (2013). *The Design of Everyday Things*. Basic Books.
+4. Shneiderman, B. (1996). "The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations." *IEEE Symposium on Visual Languages*.
+5. Kolmogorov, A. (1965). "Three approaches to the quantitative definition of information." *Problems of Information Transmission*.
 
 -----
 
 **Document Version**: 1.0  
 **Last Updated**: December 21, 2025  
-**Authors**: rsl37
+**Authors**: rsl37  
 **Contact**: roselleroberts@pm.me
