@@ -2,10 +2,40 @@
   margin-bottom: 1rem;
 }
 
-.alert-panel h3 {
+.alert-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+.alert-panel-header h3 {
+  margin: 0;
   color: #61dafb;
   font-size: 1rem;
+}
+
+.alert-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.alert-filter,
+.alert-sort {
+  flex: 1;
+  padding: 0.4rem;
+  background-color: #0f1729;
+  color: #e0e0e0;
+  border: 1px solid #2a3f5f;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.alert-filter:focus,
+.alert-sort:focus {
+  outline: none;
+  border-color: #61dafb;
 }
 
 .alert-list {
@@ -19,6 +49,15 @@
   border-radius: 4px;
   border-left: 4px solid;
   background-color: #0f1729;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.alert-item.acknowledged {
+  opacity: 0.6;
+  background-color: #0a0e27;
 }
 
 .alert-item.critical {
@@ -33,11 +72,16 @@
   border-left-color: #3b82f6;
 }
 
+.alert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .alert-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 
 .alert-severity {
@@ -46,15 +90,93 @@
   color: #a0a0a0;
 }
 
+.alert-priority {
+  margin-left: auto;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  background-color: #2a3f5f;
+  color: #61dafb;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
 .alert-message {
   font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  margin: 0;
   line-height: 1.4;
+  color: #e0e0e0;
 }
 
 .alert-time {
   font-size: 0.75rem;
   color: #6b7280;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #2a3f5f;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.4rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  background-color: #2a3f5f;
+  color: #e0e0e0;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.action-btn.investigate {
+  background-color: #3b82f6;
+}
+
+.action-btn.investigate:hover {
+  background-color: #2563eb;
+}
+
+.action-btn.acknowledge {
+  background-color: #4ade80;
+}
+
+.action-btn.acknowledge:hover {
+  background-color: #22c55e;
+}
+
+.action-btn.escalate {
+  background-color: #fbbf24;
+}
+
+.action-btn.escalate:hover {
+  background-color: #f59e0b;
+}
+
+.action-btn.resolve {
+  background-color: #ef4444;
+}
+
+.action-btn.resolve:hover {
+  background-color: #dc2626;
+}
+
+.alert-acknowledged-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #4ade80;
+  padding-top: 0.5rem;
+  border-top: 1px solid #2a3f5f;
 }
 
 .no-alerts {
