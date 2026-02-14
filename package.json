@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Real-time monitoring platform for managing complex networked systems including supply chains and Air Traffic Control facilities",
   "author": "rsl37 <roselleroberts@pm.me>",
-  "license": "SEE LICENSE IN LICENSE-SHIELD.md",
+  "license": "UNLICENSED",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
