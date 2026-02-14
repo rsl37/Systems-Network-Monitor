@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SystemTypeSelector from './components/SystemTypeSelector';
 import TopologyView from './components/TopologyView';
 import AlertPanel from './components/AlertPanel';
+import NodeDetailsPanel from './components/NodeDetailsPanel';
 import './styles/App.css';
 
 function App() {
@@ -29,15 +30,10 @@ function App() {
         
         <aside className="sidebar-panel">
           <AlertPanel systemType={systemType} />
-          {selectedNode && (
-            <div className="node-details">
-              <h3>Node Details</h3>
-              <p><strong>ID:</strong> {selectedNode.id}</p>
-              <p><strong>Name:</strong> {selectedNode.name}</p>
-              <p><strong>Type:</strong> {selectedNode.type}</p>
-              <p><strong>Status:</strong> {selectedNode.status}</p>
-            </div>
-          )}
+          <NodeDetailsPanel 
+            node={selectedNode} 
+            onClose={() => setSelectedNode(null)}
+          />
         </aside>
       </main>
     </div>
