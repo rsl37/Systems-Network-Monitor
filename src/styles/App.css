@@ -1,0 +1,40 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  background-color: #1a1f3a;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #2a3f5f;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  color: #61dafb;
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.main-panel {
+  flex: 1;
+  background-color: #0f1729;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.sidebar-panel {
+  width: 350px;
+  background-color: #1a1f3a;
+  padding: 1rem;
+  border-left: 2px solid #2a3f5f;
+  overflow-y: auto;
+}

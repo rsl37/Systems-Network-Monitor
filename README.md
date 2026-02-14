@@ -3,7 +3,7 @@
 [![License: PolyForm Shield 1.0.0](https://img.shields.io/badge/License-PolyForm%20Shield-blue.svg)](LICENSE-SHIELD.md)
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg)](LICENSE-NONCOMMERCIAL.md)
 [![React](https://img.shields.io/badge/React-18.x-61dafb.svg)](https://reactjs.org/)
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
+[![Status](https://img.shields.io/badge/Status-MVP%20Development-yellow.svg)]()
 
 Real-time monitoring platform for managing complex networked systems including supply chains and Air Traffic Control facilities.
 
@@ -28,13 +28,15 @@ Core capabilities include live status tracking, topology visualization, severity
 Clone the repository, install dependencies, and start the development server:
 
 ```bash
-git clone https://github.com/yourusername/systems-network-monitor.git
-cd systems-network-monitor
+git clone https://github.com/rsl37/Systems-Network-Monitor.git
+cd Systems-Network-Monitor
 npm install
 npm start
 ```
 
 Application opens at `http://localhost:3000`
+
+**Note**: Current implementation is an MVP with core features. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for details on what's implemented and what's still in progress.
 
 ### Production Build
 
@@ -53,6 +55,8 @@ npm run serve    # Serve locally
 - **[WHITEPAPER.md](WHITEPAPER.md)** - Complete technical architecture, COFM methodology, design philosophy, and use cases
 - **[ERD.md](ERD.md)** - Data model schemas and entity relationships
 - **[GLOSSARY.md](GLOSSARY.md)** - Canonical definitions for all technical terms
+- **[IMPLEMENTATION.md](IMPLEMENTATION.md)** - Current implementation status, what's built, and what's pending
+- **[CRITICAL_REVIEW.md](CRITICAL_REVIEW.md)** - Comprehensive code review identifying gaps and issues
 
 ## Repository Structure
 
