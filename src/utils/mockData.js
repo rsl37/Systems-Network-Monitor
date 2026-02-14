@@ -95,3 +95,60 @@ export function generateMockAlerts(systemType) {
     ];
   }
 }
+
+export function generateMockConnections(systemType) {
+  if (systemType === 'supply-chain') {
+    // Supply chain: Suppliers -> Manufacturers -> Distributors -> Warehouses -> Retail
+    return [
+      // Suppliers to Manufacturers
+      { id: 'conn-1', fromNodeId: 'sc-1', toNodeId: 'sc-3', type: 'supply', bandwidth: 1000, latency: 45 },
+      { id: 'conn-2', fromNodeId: 'sc-2', toNodeId: 'sc-3', type: 'supply', bandwidth: 800, latency: 52 },
+      { id: 'conn-3', fromNodeId: 'sc-1', toNodeId: 'sc-4', type: 'supply', bandwidth: 1200, latency: 48 },
+      { id: 'conn-4', fromNodeId: 'sc-2', toNodeId: 'sc-4', type: 'supply', bandwidth: 950, latency: 55 },
+      // Manufacturers to Distributors
+      { id: 'conn-5', fromNodeId: 'sc-3', toNodeId: 'sc-5', type: 'supply', bandwidth: 2000, latency: 120 },
+      { id: 'conn-6', fromNodeId: 'sc-4', toNodeId: 'sc-5', type: 'supply', bandwidth: 1800, latency: 115 },
+      // Distributors to Warehouses
+      { id: 'conn-7', fromNodeId: 'sc-5', toNodeId: 'sc-6', type: 'supply', bandwidth: 1500, latency: 35 },
+      { id: 'conn-8', fromNodeId: 'sc-5', toNodeId: 'sc-7', type: 'supply', bandwidth: 1600, latency: 40 },
+      // Warehouses to Retail
+      { id: 'conn-9', fromNodeId: 'sc-6', toNodeId: 'sc-8', type: 'supply', bandwidth: 500, latency: 15 },
+      { id: 'conn-10', fromNodeId: 'sc-6', toNodeId: 'sc-9', type: 'supply', bandwidth: 600, latency: 18 },
+      { id: 'conn-11', fromNodeId: 'sc-7', toNodeId: 'sc-8', type: 'supply', bandwidth: 550, latency: 12 },
+      { id: 'conn-12', fromNodeId: 'sc-7', toNodeId: 'sc-10', type: 'supply', bandwidth: 700, latency: 25 }
+    ];
+  } else {
+    // ATC: Towers <-> TRACONs <-> Centers (bidirectional communication)
+    return [
+      // Towers to TRACONs
+      { id: 'conn-1', fromNodeId: 'atc-1', toNodeId: 'atc-4', type: 'communication', bandwidth: 100, latency: 5 },
+      { id: 'conn-2', fromNodeId: 'atc-2', toNodeId: 'atc-5', type: 'communication', bandwidth: 100, latency: 8 },
+      { id: 'conn-3', fromNodeId: 'atc-3', toNodeId: 'atc-6', type: 'communication', bandwidth: 100, latency: 4 },
+      // TRACONs to Centers
+      { id: 'conn-4', fromNodeId: 'atc-4', toNodeId: 'atc-7', type: 'handoff', bandwidth: 200, latency: 10 },
+      { id: 'conn-5', fromNodeId: 'atc-5', toNodeId: 'atc-8', type: 'handoff', bandwidth: 200, latency: 12 },
+      { id: 'conn-6', fromNodeId: 'atc-6', toNodeId: 'atc-9', type: 'handoff', bandwidth: 200, latency: 8 },
+      // Centers interconnections
+      { id: 'conn-7', fromNodeId: 'atc-7', toNodeId: 'atc-8', type: 'communication', bandwidth: 500, latency: 25 },
+      { id: 'conn-8', fromNodeId: 'atc-8', toNodeId: 'atc-9', type: 'communication', bandwidth: 500, latency: 30 },
+      { id: 'conn-9', fromNodeId: 'atc-7', toNodeId: 'atc-10', type: 'communication', bandwidth: 500, latency: 15 },
+      { id: 'conn-10', fromNodeId: 'atc-9', toNodeId: 'atc-10', type: 'communication', bandwidth: 500, latency: 20 }
+    ];
+  }
+}
+
+export function generateMockMetrics(nodeId) {
+  // Generate random but realistic metrics
+  const uptime = 85 + Math.random() * 14; // 85-99%
+  const throughput = 500 + Math.random() * 1500; // 500-2000 units/hour
+  const latency = 10 + Math.random() * 90; // 10-100ms
+  
+  return {
+    id: `metrics-${nodeId}`,
+    nodeId: nodeId,
+    uptime: parseFloat(uptime.toFixed(2)),
+    throughput: Math.floor(throughput),
+    latency: Math.floor(latency),
+    timestamp: new Date()
+  };
+}

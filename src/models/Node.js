@@ -60,3 +60,21 @@ export const AlertSeverity = {
   WARNING: 'warning',
   INFO: 'info'
 };
+
+export class NodeConnection {
+  constructor(fromNodeId, toNodeId, connectionType, bandwidth, latency) {
+    this.id = `conn-${fromNodeId}-${toNodeId}`;
+    this.fromNodeId = fromNodeId;
+    this.toNodeId = toNodeId;
+    this.connectionType = connectionType; // 'supply', 'communication', 'handoff'
+    this.bandwidth = bandwidth; // Mbps or units/hour
+    this.latency = latency; // milliseconds
+    this.createdAt = new Date();
+  }
+}
+
+export const ConnectionType = {
+  SUPPLY: 'supply',
+  COMMUNICATION: 'communication',
+  HANDOFF: 'handoff'
+};
