@@ -1,0 +1,26 @@
+.topology-view {
+  height: 100%;
+}
+
+.topology-view h2 {
+  margin-bottom: 1rem;
+  color: #61dafb;
+  font-size: 1.2rem;
+}
+
+.topology-svg {
+  width: 100%;
+  height: calc(100% - 3rem);
+  background-color: #0a0e27;
+  border: 1px solid #2a3f5f;
+  border-radius: 4px;
+}
+
+.node-circle {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.node-circle:hover {
+  filter: brightness(1.2);
+}
