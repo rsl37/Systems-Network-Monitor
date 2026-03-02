@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { generateMockMetrics } from '../utils/mockData';
 import { TrendingUp, TrendingDown, Activity, MapPin, Clock } from 'lucide-react';
 import './NodeDetailsPanel.css';
 
 function NodeDetailsPanel({ node, onClose }) {
+  const [actionStatus, setActionStatus] = useState(null);
+
+  useEffect(() => {
+    setActionStatus(null);
+  }, [node?.id]);
+
   if (!node) return null;
 
   const metrics = generateMockMetrics(node.id);
+
+  const handleAction = (label) => {
+    setActionStatus(label);
+  };
   
   const getStatusBadgeClass = (status) => {
     return `status-badge ${status}`;
@@ -22,7 +32,7 @@ function NodeDetailsPanel({ node, onClose }) {
     <div className="node-details-panel">
       <div className="panel-header">
         <h3>{node.name}</h3>
-        <button className="close-btn" onClick={onClose}>×</button>
+        <button className="close-btn" onClick={onClose} aria-label="Close node details">×</button>
       </div>
 
       <div className="panel-content">
@@ -144,10 +154,17 @@ function NodeDetailsPanel({ node, onClose }) {
         {/* Actions Section */}
         <section className="details-section">
           <h4>Quick Actions</h4>
+          {actionStatus && (
+            <p className="action-status-msg">
+              {actionStatus === 'View Full Details' && 'Full details view is not available in this MVP.'}
+              {actionStatus === 'Run Diagnostics' && `Diagnostics initiated for ${node.name}.`}
+              {actionStatus === 'Schedule Maintenance' && 'Maintenance scheduling is not yet integrated.'}
+            </p>
+          )}
           <div className="action-buttons">
-            <button className="action-btn primary">View Full Details</button>
-            <button className="action-btn secondary">Run Diagnostics</button>
-            <button className="action-btn secondary">Schedule Maintenance</button>
+            <button className="action-btn primary" onClick={() => handleAction('View Full Details')}>View Full Details</button>
+            <button className="action-btn secondary" onClick={() => handleAction('Run Diagnostics')}>Run Diagnostics</button>
+            <button className="action-btn secondary" onClick={() => handleAction('Schedule Maintenance')}>Schedule Maintenance</button>
           </div>
         </section>
       </div>

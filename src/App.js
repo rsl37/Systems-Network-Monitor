@@ -3,6 +3,7 @@ import SystemTypeSelector from './components/SystemTypeSelector';
 import TopologyView from './components/TopologyView';
 import AlertPanel from './components/AlertPanel';
 import NodeDetailsPanel from './components/NodeDetailsPanel';
+import ErrorBoundary from './components/ErrorBoundary';
 import './styles/App.css';
 
 function App() {
@@ -21,19 +22,25 @@ function App() {
       
       <main className="app-main">
         <div className="main-panel">
-          <TopologyView 
-            systemType={systemType}
-            selectedNode={selectedNode}
-            onNodeSelect={setSelectedNode}
-          />
+          <ErrorBoundary>
+            <TopologyView 
+              systemType={systemType}
+              selectedNode={selectedNode}
+              onNodeSelect={setSelectedNode}
+            />
+          </ErrorBoundary>
         </div>
         
         <aside className="sidebar-panel">
-          <AlertPanel systemType={systemType} />
-          <NodeDetailsPanel 
-            node={selectedNode} 
-            onClose={() => setSelectedNode(null)}
-          />
+          <ErrorBoundary>
+            <AlertPanel systemType={systemType} />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <NodeDetailsPanel 
+              node={selectedNode} 
+              onClose={() => setSelectedNode(null)}
+            />
+          </ErrorBoundary>
         </aside>
       </main>
     </div>
