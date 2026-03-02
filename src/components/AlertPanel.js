@@ -119,7 +119,11 @@ function AlertPanel({ systemType }) {
                   )}
                 </div>
                 <p className="alert-message">{alert.message}</p>
-                <span className="alert-time">{alert.timestamp}</span>
+                <span className="alert-time">
+                  {alert.timestamp instanceof Date 
+                    ? alert.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                    : alert.timestamp}
+                </span>
               </div>
               
               {!alert.acknowledged && (

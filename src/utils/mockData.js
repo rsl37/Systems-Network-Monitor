@@ -41,7 +41,7 @@ export function generateMockAlerts(systemType) {
         severity: 'critical',
         message: 'Factory 2 offline due to power outage',
         type: 'node_failure',
-        timestamp: new Date(now - 5 * 60000).toLocaleTimeString(),
+        timestamp: new Date(now - 5 * 60000),
         acknowledged: false
       },
       {
@@ -50,7 +50,7 @@ export function generateMockAlerts(systemType) {
         severity: 'warning',
         message: 'Supplier B experiencing throughput degradation (45%)',
         type: 'performance',
-        timestamp: new Date(now - 15 * 60000).toLocaleTimeString(),
+        timestamp: new Date(now - 15 * 60000),
         acknowledged: false
       },
       {
@@ -59,7 +59,7 @@ export function generateMockAlerts(systemType) {
         severity: 'warning',
         message: 'Warehouse 2 approaching capacity threshold (87%)',
         type: 'capacity',
-        timestamp: new Date(now - 30 * 60000).toLocaleTimeString(),
+        timestamp: new Date(now - 30 * 60000),
         acknowledged: false
       }
     ];
@@ -71,7 +71,7 @@ export function generateMockAlerts(systemType) {
         severity: 'critical',
         message: 'SCT TRACON communication system failure',
         type: 'communication',
-        timestamp: new Date(now - 3 * 60000).toLocaleTimeString(),
+        timestamp: new Date(now - 3 * 60000),
         acknowledged: false
       },
       {
@@ -80,7 +80,7 @@ export function generateMockAlerts(systemType) {
         severity: 'warning',
         message: 'LAX Tower approaching capacity (67 aircraft)',
         type: 'capacity',
-        timestamp: new Date(now - 10 * 60000).toLocaleTimeString(),
+        timestamp: new Date(now - 10 * 60000),
         acknowledged: false
       },
       {
@@ -89,7 +89,7 @@ export function generateMockAlerts(systemType) {
         severity: 'warning',
         message: 'ZLA Center experiencing increased latency (125ms)',
         type: 'performance',
-        timestamp: new Date(now - 20 * 60000).toLocaleTimeString(),
+        timestamp: new Date(now - 20 * 60000),
         acknowledged: false
       }
     ];

@@ -26,7 +26,7 @@ export class NodeMetrics {
 
 export class Alert {
   constructor(nodeId, severity, message, type) {
-    this.id = `alert-${Date.now()}-${Math.random()}`;
+    this.id = crypto.randomUUID ? crypto.randomUUID() : `alert-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
     this.nodeId = nodeId;
     this.severity = severity; // 'critical', 'warning', 'info'
     this.message = message;

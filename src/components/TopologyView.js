@@ -143,7 +143,20 @@ function TopologyView({ systemType, selectedNode, onNodeSelect }) {
             const visible = isNodeVisible(node);
             
             return (
-              <g key={node.id} onClick={() => onNodeSelect(node)} opacity={visible ? 1 : 0.3}>
+              <g 
+                key={node.id} 
+                onClick={() => onNodeSelect(node)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onNodeSelect(node);
+                  }
+                }}
+                role="button"
+                tabIndex={visible ? 0 : -1}
+                aria-label={`${node.name}, ${node.type}, status: ${node.status}, location: ${node.location}`}
+                opacity={visible ? 1 : 0.3}
+              >
                 <circle
                   cx={x}
                   cy={y}
