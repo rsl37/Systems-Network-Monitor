@@ -1,0 +1,25 @@
+.system-type-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.system-type-selector button {
+  padding: 0.5rem 1rem;
+  background-color: #2a3f5f;
+  color: #e0e0e0;
+  border: 1px solid #3a5f8f;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.system-type-selector button:hover {
+  background-color: #3a5f8f;
+}
+
+.system-type-selector button.active {
+  background-color: #61dafb;
+  color: #0a0e27;
+  border-color: #61dafb;
+}
