@@ -2,23 +2,40 @@ import React, { useState } from 'react';
 import { Search, X, Filter } from 'lucide-react';
 import './SearchBar.css';
 
-function SearchBar({ onSearch, onFilter, filters, onClearFilters }) {
-  const [searchTerm, setSearchTerm] = useState('');
+const SUPPLY_CHAIN_TYPES = [
+  { value: 'supplier', label: 'Supplier' },
+  { value: 'manufacturer', label: 'Manufacturer' },
+  { value: 'distributor', label: 'Distributor' },
+  { value: 'warehouse', label: 'Warehouse' },
+  { value: 'retail', label: 'Retail' },
+];
+
+const ATC_TYPES = [
+  { value: 'tower', label: 'Tower' },
+  { value: 'tracon', label: 'TRACON' },
+  { value: 'center', label: 'Center' },
+];
+
+function SearchBar({ value, onSearch, onFilter, filters, onClearFilters, systemType }) {
   const [showFilters, setShowFilters] = useState(false);
 
+  const typeOptions = systemType === 'supply-chain' ? SUPPLY_CHAIN_TYPES : ATC_TYPES;
+
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+    onSearch(e.target.value);
   };
 
   const handleClearSearch = () => {
-    setSearchTerm('');
     onSearch('');
   };
 
-  const handleFilterChange = (filterType, value) => {
-    onFilter(filterType, value);
+  const handleFilterChange = (filterType, filterValue) => {
+    onFilter(filterType, filterValue);
+  };
+
+  const handleClearAll = () => {
+    onSearch('');
+    onClearFilters();
   };
 
   const hasActiveFilters = () => {
@@ -33,10 +50,10 @@ function SearchBar({ onSearch, onFilter, filters, onClearFilters }) {
           type="text"
           className="search-input"
           placeholder="Search nodes by name, type, or location..."
-          value={searchTerm}
+          value={value}
           onChange={handleSearchChange}
         />
-        {searchTerm && (
+        {value && (
           <button className="clear-search-btn" onClick={handleClearSearch}>
             <X size={16} />
           </button>
@@ -99,50 +116,26 @@ function SearchBar({ onSearch, onFilter, filters, onClearFilters }) {
           <div className="filter-section">
             <h4>Type</h4>
             <div className="filter-options">
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.type.includes('supplier')}
-                  onChange={(e) => {
-                    const newType = e.target.checked 
-                      ? [...filters.type, 'supplier']
-                      : filters.type.filter(t => t !== 'supplier');
-                    handleFilterChange('type', newType);
-                  }}
-                />
-                <span>Supplier</span>
-              </label>
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.type.includes('manufacturer')}
-                  onChange={(e) => {
-                    const newType = e.target.checked 
-                      ? [...filters.type, 'manufacturer']
-                      : filters.type.filter(t => t !== 'manufacturer');
-                    handleFilterChange('type', newType);
-                  }}
-                />
-                <span>Manufacturer</span>
-              </label>
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.type.includes('warehouse')}
-                  onChange={(e) => {
-                    const newType = e.target.checked 
-                      ? [...filters.type, 'warehouse']
-                      : filters.type.filter(t => t !== 'warehouse');
-                    handleFilterChange('type', newType);
-                  }}
-                />
-                <span>Warehouse</span>
-              </label>
+              {typeOptions.map(({ value: typeValue, label }) => (
+                <label key={typeValue} className="filter-option">
+                  <input
+                    type="checkbox"
+                    checked={filters.type.includes(typeValue)}
+                    onChange={(e) => {
+                      const newType = e.target.checked
+                        ? [...filters.type, typeValue]
+                        : filters.type.filter(t => t !== typeValue);
+                      handleFilterChange('type', newType);
+                    }}
+                  />
+                  <span>{label}</span>
+                </label>
+              ))}
             </div>
           </div>
 
-          {hasActiveFilters() && (
-            <button className="clear-filters-btn" onClick={onClearFilters}>
+          {(hasActiveFilters() || value) && (
+            <button className="clear-filters-btn" onClick={handleClearAll}>
               Clear All Filters
             </button>
           )}

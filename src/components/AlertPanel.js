@@ -36,6 +36,18 @@ function AlertPanel({ systemType }) {
     return severityWeight[alert.severity] * impactFactor * timeDecay;
   };
 
+  const handleInvestigate = (alertId) => {
+    setAlerts(alerts.map(alert =>
+      alert.id === alertId ? { ...alert, investigating: true } : alert
+    ));
+  };
+
+  const handleEscalate = (alertId) => {
+    setAlerts(alerts.map(alert =>
+      alert.id === alertId ? { ...alert, escalated: true } : alert
+    ));
+  };
+
   const handleAcknowledge = (alertId) => {
     setAlerts(alerts.map(alert => 
       alert.id === alertId ? { ...alert, acknowledged: true } : alert
@@ -129,9 +141,10 @@ function AlertPanel({ systemType }) {
               {!alert.acknowledged && (
                 <div className="alert-actions">
                   <button 
-                    className="action-btn investigate" 
-                    title="Investigate"
-                    onClick={() => console.log('Investigate', alert.id)}
+                    className={`action-btn investigate${alert.investigating ? ' active' : ''}`}
+                    title={alert.investigating ? 'Under Investigation' : 'Investigate'}
+                    onClick={() => handleInvestigate(alert.id)}
+                    disabled={alert.investigating}
                   >
                     <Eye size={14} />
                   </button>
@@ -143,9 +156,10 @@ function AlertPanel({ systemType }) {
                     <Check size={14} />
                   </button>
                   <button 
-                    className="action-btn escalate" 
-                    title="Escalate"
-                    onClick={() => console.log('Escalate', alert.id)}
+                    className={`action-btn escalate${alert.escalated ? ' active' : ''}`}
+                    title={alert.escalated ? 'Escalated' : 'Escalate'}
+                    onClick={() => handleEscalate(alert.id)}
+                    disabled={alert.escalated}
                   >
                     <ArrowUpCircle size={14} />
                   </button>
