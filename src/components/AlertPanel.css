@@ -179,6 +179,21 @@
   border-top: 1px solid #2a3f5f;
 }
 
+.alert-escalated-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #fbbf24;
+  padding-top: 0.5rem;
+  border-top: 1px solid #2a3f5f;
+}
+
+.action-btn.investigate.active {
+  background-color: #1d4ed8;
+  outline: 2px solid #61dafb;
+}
+
 .no-alerts {
   text-align: center;
   color: #6b7280;

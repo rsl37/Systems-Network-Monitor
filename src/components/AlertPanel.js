@@ -36,6 +36,18 @@ function AlertPanel({ systemType }) {
     return severityWeight[alert.severity] * impactFactor * timeDecay;
   };
 
+  const handleInvestigate = (alertId) => {
+    setAlerts(alerts.map(alert =>
+      alert.id === alertId ? { ...alert, investigating: true } : alert
+    ));
+  };
+
+  const handleEscalate = (alertId) => {
+    setAlerts(alerts.map(alert =>
+      alert.id === alertId ? { ...alert, escalated: true, acknowledged: true } : alert
+    ));
+  };
+
   const handleAcknowledge = (alertId) => {
     setAlerts(alerts.map(alert => 
       alert.id === alertId ? { ...alert, acknowledged: true } : alert
@@ -72,6 +84,9 @@ function AlertPanel({ systemType }) {
     // Apply sorting
     if (sortBy === 'severity') {
       filtered = [...filtered].sort((a, b) => b.priorityScore - a.priorityScore);
+    } else {
+      // Sort by time: newest first
+      filtered = [...filtered].sort((a, b) => b.timestamp - a.timestamp);
     }
     
     return filtered;
@@ -129,9 +144,9 @@ function AlertPanel({ systemType }) {
               {!alert.acknowledged && (
                 <div className="alert-actions">
                   <button 
-                    className="action-btn investigate" 
-                    title="Investigate"
-                    onClick={() => console.log('Investigate', alert.id)}
+                    className={`action-btn investigate${alert.investigating ? ' active' : ''}`}
+                    title={alert.investigating ? 'Under Investigation' : 'Investigate'}
+                    onClick={() => handleInvestigate(alert.id)}
                   >
                     <Eye size={14} />
                   </button>
@@ -145,7 +160,7 @@ function AlertPanel({ systemType }) {
                   <button 
                     className="action-btn escalate" 
                     title="Escalate"
-                    onClick={() => console.log('Escalate', alert.id)}
+                    onClick={() => handleEscalate(alert.id)}
                   >
                     <ArrowUpCircle size={14} />
                   </button>
@@ -159,10 +174,17 @@ function AlertPanel({ systemType }) {
                 </div>
               )}
               
-              {alert.acknowledged && (
+              {alert.acknowledged && !alert.escalated && (
                 <div className="alert-acknowledged-badge">
                   <Check size={12} />
                   <span>Acknowledged</span>
+                </div>
+              )}
+
+              {alert.escalated && (
+                <div className="alert-escalated-badge">
+                  <ArrowUpCircle size={12} />
+                  <span>Escalated</span>
                 </div>
               )}
             </div>

@@ -2,9 +2,26 @@ import React, { useState } from 'react';
 import { Search, X, Filter } from 'lucide-react';
 import './SearchBar.css';
 
-function SearchBar({ onSearch, onFilter, filters, onClearFilters }) {
+const NODE_TYPES = {
+  'supply-chain': [
+    { value: 'supplier', label: 'Supplier' },
+    { value: 'manufacturer', label: 'Manufacturer' },
+    { value: 'distributor', label: 'Distributor' },
+    { value: 'warehouse', label: 'Warehouse' },
+    { value: 'retail', label: 'Retail' },
+  ],
+  atc: [
+    { value: 'tower', label: 'Tower' },
+    { value: 'tracon', label: 'TRACON' },
+    { value: 'center', label: 'Center' },
+  ],
+};
+
+function SearchBar({ onSearch, onFilter, filters, onClearFilters, systemType }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+
+  const nodeTypes = NODE_TYPES[systemType] || NODE_TYPES['supply-chain'];
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -99,45 +116,21 @@ function SearchBar({ onSearch, onFilter, filters, onClearFilters }) {
           <div className="filter-section">
             <h4>Type</h4>
             <div className="filter-options">
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.type.includes('supplier')}
-                  onChange={(e) => {
-                    const newType = e.target.checked 
-                      ? [...filters.type, 'supplier']
-                      : filters.type.filter(t => t !== 'supplier');
-                    handleFilterChange('type', newType);
-                  }}
-                />
-                <span>Supplier</span>
-              </label>
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.type.includes('manufacturer')}
-                  onChange={(e) => {
-                    const newType = e.target.checked 
-                      ? [...filters.type, 'manufacturer']
-                      : filters.type.filter(t => t !== 'manufacturer');
-                    handleFilterChange('type', newType);
-                  }}
-                />
-                <span>Manufacturer</span>
-              </label>
-              <label className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={filters.type.includes('warehouse')}
-                  onChange={(e) => {
-                    const newType = e.target.checked 
-                      ? [...filters.type, 'warehouse']
-                      : filters.type.filter(t => t !== 'warehouse');
-                    handleFilterChange('type', newType);
-                  }}
-                />
-                <span>Warehouse</span>
-              </label>
+              {nodeTypes.map(({ value, label }) => (
+                <label key={value} className="filter-option">
+                  <input
+                    type="checkbox"
+                    checked={filters.type.includes(value)}
+                    onChange={(e) => {
+                      const newType = e.target.checked
+                        ? [...filters.type, value]
+                        : filters.type.filter(t => t !== value);
+                      handleFilterChange('type', newType);
+                    }}
+                  />
+                  <span>{label}</span>
+                </label>
+              ))}
             </div>
           </div>
 

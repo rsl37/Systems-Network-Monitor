@@ -245,6 +245,16 @@
   gap: 0.5rem;
 }
 
+.action-status-msg {
+  font-size: 0.8rem;
+  color: #61dafb;
+  background-color: rgba(97, 218, 251, 0.1);
+  border: 1px solid rgba(97, 218, 251, 0.3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
 .action-btn {
   padding: 0.75rem;
   border: none;

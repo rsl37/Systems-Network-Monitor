@@ -87,6 +87,7 @@ function TopologyView({ systemType, selectedNode, onNodeSelect }) {
           onFilter={handleFilter}
           filters={filters}
           onClearFilters={handleClearFilters}
+          systemType={systemType}
         />
       </div>
       

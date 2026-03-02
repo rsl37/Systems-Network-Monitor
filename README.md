@@ -81,13 +81,12 @@ This project is dual-licensed:
 1. **[PolyForm Shield License 1.0.0](LICENSE-SHIELD.md)** - Use and modification with restrictions on competing uses
 2. **[PolyForm Noncommercial License 1.0.0](LICENSE-NONCOMMERCIAL.md)** - Noncommercial use and modification
 
-For commercial licensing: licensing@yourcompany.com
+For commercial licensing: roselleroberts@pm.me
 
 ## Contact
 
 - Issues and discussions: GitHub Issues and Discussions
-- Email: support@yourcompany.com
-- Documentation: docs.yourcompany.com
+- Email: roselleroberts@pm.me
 
 ## Roadmap
 
