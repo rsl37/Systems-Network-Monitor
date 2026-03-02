@@ -1,4 +1,7 @@
 // Node data model based on ERD.md specifications
+// NOTE: These model classes are defined for future use and ERD alignment.
+// Current implementation uses plain objects from mockData.js for MVP simplicity.
+// TODO: Refactor to use these classes once data persistence/API layer is added.
 
 export class Node {
   constructor(id, systemTypeId, name, type, status, location) {
