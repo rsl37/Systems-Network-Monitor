@@ -3,20 +3,20 @@ import { generateMockAlerts } from '../utils/mockData';
 import { AlertCircle, AlertTriangle, Info, Check, Eye, ArrowUpCircle, XCircle } from 'lucide-react';
 import './AlertPanel.css';
 
-function AlertPanel({ systemType }) {
+function AlertPanel({ systemType, importedAlerts }) {
   const [alerts, setAlerts] = useState([]);
   const [filter, setFilter] = useState('all'); // 'all', 'critical', 'warning', 'info'
   const [sortBy, setSortBy] = useState('time'); // 'time', 'severity'
 
   useEffect(() => {
-    const mockAlerts = generateMockAlerts(systemType);
+    const rawAlerts = importedAlerts || generateMockAlerts(systemType);
     // Add priority scores to alerts
-    const alertsWithPriority = mockAlerts.map(alert => ({
+    const alertsWithPriority = rawAlerts.map(alert => ({
       ...alert,
       priorityScore: calculatePriorityScore(alert)
     }));
     setAlerts(alertsWithPriority);
-  }, [systemType]);
+  }, [systemType, importedAlerts]);
 
   const calculatePriorityScore = (alert) => {
     // Priority Score = Severity Weight × Impact Factor × Time Decay
@@ -37,14 +37,14 @@ function AlertPanel({ systemType }) {
   };
 
   const handleInvestigate = (alertId) => {
-    setAlerts(prev => prev.map(alert =>
+    setAlerts(alerts.map(alert =>
       alert.id === alertId ? { ...alert, investigating: true } : alert
     ));
   };
 
   const handleEscalate = (alertId) => {
-    setAlerts(prev => prev.map(alert =>
-      alert.id === alertId ? { ...alert, escalated: true, acknowledged: true } : alert
+    setAlerts(alerts.map(alert =>
+      alert.id === alertId ? { ...alert, escalated: true } : alert
     ));
   };
 
@@ -145,9 +145,9 @@ function AlertPanel({ systemType }) {
                 <div className="alert-actions">
                   <button 
                     className={`action-btn investigate${alert.investigating ? ' active' : ''}`}
-                    aria-label={alert.investigating ? 'Under Investigation' : 'Investigate'}
                     title={alert.investigating ? 'Under Investigation' : 'Investigate'}
                     onClick={() => handleInvestigate(alert.id)}
+                    disabled={alert.investigating}
                   >
                     <Eye size={14} />
                   </button>
@@ -160,10 +160,10 @@ function AlertPanel({ systemType }) {
                     <Check size={14} />
                   </button>
                   <button 
-                    className="action-btn escalate"
-                    aria-label="Escalate"
-                    title="Escalate"
+                    className={`action-btn escalate${alert.escalated ? ' active' : ''}`}
+                    title={alert.escalated ? 'Escalated' : 'Escalate'}
                     onClick={() => handleEscalate(alert.id)}
+                    disabled={alert.escalated}
                   >
                     <ArrowUpCircle size={14} />
                   </button>

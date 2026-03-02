@@ -2,40 +2,40 @@ import React, { useState } from 'react';
 import { Search, X, Filter } from 'lucide-react';
 import './SearchBar.css';
 
-const NODE_TYPES = {
-  'supply-chain': [
-    { value: 'supplier', label: 'Supplier' },
-    { value: 'manufacturer', label: 'Manufacturer' },
-    { value: 'distributor', label: 'Distributor' },
-    { value: 'warehouse', label: 'Warehouse' },
-    { value: 'retail', label: 'Retail' },
-  ],
-  atc: [
-    { value: 'tower', label: 'Tower' },
-    { value: 'tracon', label: 'TRACON' },
-    { value: 'center', label: 'Center' },
-  ],
-};
+const SUPPLY_CHAIN_TYPES = [
+  { value: 'supplier', label: 'Supplier' },
+  { value: 'manufacturer', label: 'Manufacturer' },
+  { value: 'distributor', label: 'Distributor' },
+  { value: 'warehouse', label: 'Warehouse' },
+  { value: 'retail', label: 'Retail' },
+];
 
-function SearchBar({ onSearch, onFilter, filters, onClearFilters, systemType }) {
-  const [searchTerm, setSearchTerm] = useState('');
+const ATC_TYPES = [
+  { value: 'tower', label: 'Tower' },
+  { value: 'tracon', label: 'TRACON' },
+  { value: 'center', label: 'Center' },
+];
+
+function SearchBar({ value, onSearch, onFilter, filters, onClearFilters, systemType }) {
   const [showFilters, setShowFilters] = useState(false);
 
-  const nodeTypes = NODE_TYPES[systemType] || NODE_TYPES['supply-chain'];
+  const typeOptions = systemType === 'supply-chain' ? SUPPLY_CHAIN_TYPES : ATC_TYPES;
 
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+    onSearch(e.target.value);
   };
 
   const handleClearSearch = () => {
-    setSearchTerm('');
     onSearch('');
   };
 
-  const handleFilterChange = (filterType, value) => {
-    onFilter(filterType, value);
+  const handleFilterChange = (filterType, filterValue) => {
+    onFilter(filterType, filterValue);
+  };
+
+  const handleClearAll = () => {
+    onSearch('');
+    onClearFilters();
   };
 
   const hasActiveFilters = () => {
@@ -50,10 +50,10 @@ function SearchBar({ onSearch, onFilter, filters, onClearFilters, systemType }) 
           type="text"
           className="search-input"
           placeholder="Search nodes by name, type, or location..."
-          value={searchTerm}
+          value={value}
           onChange={handleSearchChange}
         />
-        {searchTerm && (
+        {value && (
           <button className="clear-search-btn" onClick={handleClearSearch}>
             <X size={16} />
           </button>
@@ -116,15 +116,15 @@ function SearchBar({ onSearch, onFilter, filters, onClearFilters, systemType }) 
           <div className="filter-section">
             <h4>Type</h4>
             <div className="filter-options">
-              {nodeTypes.map(({ value, label }) => (
-                <label key={value} className="filter-option">
+              {typeOptions.map(({ value: typeValue, label }) => (
+                <label key={typeValue} className="filter-option">
                   <input
                     type="checkbox"
-                    checked={filters.type.includes(value)}
+                    checked={filters.type.includes(typeValue)}
                     onChange={(e) => {
                       const newType = e.target.checked
-                        ? [...filters.type, value]
-                        : filters.type.filter(t => t !== value);
+                        ? [...filters.type, typeValue]
+                        : filters.type.filter(t => t !== typeValue);
                       handleFilterChange('type', newType);
                     }}
                   />
@@ -134,8 +134,8 @@ function SearchBar({ onSearch, onFilter, filters, onClearFilters, systemType }) 
             </div>
           </div>
 
-          {hasActiveFilters() && (
-            <button className="clear-filters-btn" onClick={onClearFilters}>
+          {(hasActiveFilters() || value) && (
+            <button className="clear-filters-btn" onClick={handleClearAll}>
               Clear All Filters
             </button>
           )}

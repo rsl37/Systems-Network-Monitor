@@ -3,18 +3,23 @@ import { generateMockNodes, generateMockConnections } from '../utils/mockData';
 import SearchBar from './SearchBar';
 import './TopologyView.css';
 
-function TopologyView({ systemType, selectedNode, onNodeSelect }) {
+function TopologyView({ systemType, selectedNode, onNodeSelect, importedNodes, importedConnections }) {
   const [nodes, setNodes] = useState([]);
   const [connections, setConnections] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ status: [], type: [] });
 
   useEffect(() => {
-    setNodes(generateMockNodes(systemType));
-    setConnections(generateMockConnections(systemType));
-    setSearchTerm('');
+    if (importedNodes) {
+      setNodes(importedNodes);
+      setConnections(importedConnections || []);
+    } else {
+      setNodes(generateMockNodes(systemType));
+      setConnections(generateMockConnections(systemType));
+    }
     setFilters({ status: [], type: [] });
-  }, [systemType]);
+    setSearchTerm('');
+  }, [systemType, importedNodes, importedConnections]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -85,6 +90,7 @@ function TopologyView({ systemType, selectedNode, onNodeSelect }) {
       <div className="topology-header">
         <h2>Network Topology - {systemType === 'supply-chain' ? 'Supply Chain' : 'Air Traffic Control'}</h2>
         <SearchBar 
+          value={searchTerm}
           onSearch={handleSearch}
           onFilter={handleFilter}
           filters={filters}
@@ -107,7 +113,7 @@ function TopologyView({ systemType, selectedNode, onNodeSelect }) {
             const to = getNodePosition(conn.toNodeId);
             const fromNode = nodes.find(n => n.id === conn.fromNodeId);
             const toNode = nodes.find(n => n.id === conn.toNodeId);
-            const isVisible = isNodeVisible(fromNode) && isNodeVisible(toNode);
+            const isVisible = !!fromNode && !!toNode && isNodeVisible(fromNode) && isNodeVisible(toNode);
             
             return (
               <g key={conn.id} opacity={isVisible ? 1 : 0.2}>

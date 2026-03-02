@@ -1,32 +1,33 @@
 # Implementation Notes
 
 **Implementation Date**: February 14, 2026  
-**Version**: 1.0-MVP  
+**Last Updated**: March 2026  
+**Version**: 1.0-RC1  
 
 ---
 
-## What Was Implemented
-
-This document details the initial implementation created to address the critical gaps identified in CRITICAL_REVIEW.md.
+## What Is Implemented
 
 ### Core Infrastructure ✅
 
-1. **package.json** - Added with proper dependencies:
-   - React 18.2.0
-   - React DOM 18.2.0
+1. **package.json** - All dependencies declared:
+   - React 18.2.0, React DOM 18.2.0
    - Lucide React for icons
    - React Scripts for build tooling
-   - Testing libraries
+   - Testing libraries (React Testing Library, Jest)
 
-2. **Project Structure** - Created standard React application structure:
+2. **Project Structure** - Standard React application structure:
    ```
    public/
    └── index.html
    src/
    ├── components/
-   │   ├── SystemTypeSelector.js
-   │   ├── TopologyView.js
-   │   └── AlertPanel.js
+   │   ├── ErrorBoundary.js / .css
+   │   ├── SystemTypeSelector.js / .css
+   │   ├── TopologyView.js / .css
+   │   ├── AlertPanel.js / .css
+   │   ├── NodeDetailsPanel.js / .css
+   │   └── SearchBar.js / .css
    ├── models/
    │   └── Node.js
    ├── utils/
@@ -39,94 +40,83 @@ This document details the initial implementation created to address the critical
    └── index.js
    ```
 
-3. **.gitignore** - Updated to exclude:
-   - node_modules/
-   - build/
-   - Environment files
-   - Editor configs
-   - OS files
+3. **.gitignore** - Excludes node_modules/, build/, environment files, logs, editor configs
 
 ### Components Implemented ✅
 
-1. **App.js** - Main application component with state management
-   - System type selection state
-   - Selected node state
-   - Layout structure (header, main panel, sidebar)
+1. **App.js** - Main application with state management and ErrorBoundary wrapper
 
-2. **SystemTypeSelector** - Toggle between Supply Chain and ATC modes
-   - Button-based UI
-   - Active state styling
-   - System type change handler
+2. **ErrorBoundary** - Class component catching runtime errors, shows user-friendly fallback UI
 
-3. **TopologyView** - Network visualization component
-   - SVG-based node rendering
-   - Status-based color coding (green/yellow/red)
-   - Click handling for node selection
-   - Responsive grid layout
+3. **SystemTypeSelector** - Toggle between Supply Chain and ATC modes with active state styling
 
-4. **AlertPanel** - Real-time alert display
-   - Severity-based styling
-   - Icon indicators (Lucide React)
-   - Timestamp display
-   - Alert count badge
+4. **TopologyView** - SVG network topology visualization
+   - Color-coded nodes by status (green/yellow/red)
+   - Connection lines with latency labels
+   - Click-to-select node interaction with keyboard accessibility (Enter/Space)
+   - Integrated search and filter bar
+   - Filters reset when system type changes
+
+5. **AlertPanel** - Real-time alert display
+   - Severity-based styling and icons
+   - Priority score calculation (Severity × Impact × Time Decay)
+   - Filter by severity, sort by time or priority
+   - Alert actions: Investigate (marks under investigation), Acknowledge, Escalate, Resolve
+   - Acknowledged and escalation state tracking
+
+6. **NodeDetailsPanel** - Sidebar panel for selected node details
+   - Basic information (ID, type, status, location)
+   - Performance metrics (uptime bar, throughput, latency)
+   - Recent activity timeline
+   - Quick action buttons
+   - Accessible close button with aria-label
+
+7. **SearchBar** - Search and filter for topology nodes
+   - Controlled input (parent-driven state)
+   - Dynamic type options based on system type (supply chain vs. ATC)
+   - Status filters (Operational, Warning, Critical)
+   - "Clear All Filters" clears both search and type/status filters
+
+8. **DataUpload** - ETL data import modal (`src/components/DataUpload.js`, `src/utils/etl.js`)
+   - Drag-and-drop or click-to-browse file upload (.json or .csv)
+   - Full Extract-Transform-Load pipeline with field validation and normalisation
+   - Verifies connection/alert node references against the uploaded node list
+   - Live preview: node/connection/alert counts on success, error list on failure
+   - Downloadable JSON and CSV templates (system-type-aware)
+   - "Import Data" button in app header; "Reset to Demo" to return to mock data
 
 ### Data Models ✅
 
-Implemented according to ERD.md specifications:
-
-1. **Node** class - Core network node entity
-   - Properties: id, systemTypeId, name, type, status, location
-   - Timestamps: createdAt, updatedAt
-
-2. **NodeMetrics** class - Performance metrics
-   - Properties: uptime, throughput, latency
-   - Linked to parent node
-
-3. **Alert** class - Alert entity
-   - Properties: severity, message, type, timestamp
-   - Methods: acknowledge(), resolve()
-   - Status tracking
-
-4. **Constants** - NodeStatus and AlertSeverity enums
+1. **Node** class - id, systemTypeId, name, type, status, location, timestamps
+2. **NodeMetrics** class - uptime, throughput, latency linked to parent node
+3. **Alert** class - severity, message, type, timestamp, acknowledge()/resolve() methods
+4. **NodeConnection** class - fromNodeId, toNodeId, connectionType, bandwidth, latency
+5. **Constants** - NodeStatus and AlertSeverity enums, ConnectionType enum
 
 ### Mock Data ✅
 
-Created mock data generators for development:
-
-1. **generateMockNodes()** - Creates sample nodes for each system type
-   - Supply Chain: 10 nodes (suppliers, manufacturers, distributors, warehouses, retail)
-   - ATC: 10 nodes (towers, TRACONs, centers)
-   - Realistic names and locations
-
-2. **generateMockAlerts()** - Creates sample alerts
-   - Critical, warning, and info severity levels
-   - Contextual messages based on system type
-   - Realistic timestamps
-
-### Styling ✅
-
-Professional dark theme matching documented design:
-
-1. **Color Palette**:
-   - Background: #0a0e27 (deep blue-black)
-   - Panels: #1a1f3a (dark blue)
-   - Accent: #61dafb (cyan)
-   - Status colors: Green (#4ade80), Yellow (#fbbf24), Red (#ef4444)
-
-2. **Layout**:
-   - Flexbox-based responsive design
-   - Header with branding and controls
-   - Main panel for visualization
-   - Sidebar for alerts and details
+1. **generateMockNodes()** - 10 nodes per system type (supply chain or ATC)
+2. **generateMockAlerts()** - Contextual alerts with Date timestamps
+3. **generateMockConnections()** - Connection graph for each system type
+4. **generateMockMetrics()** - Randomized but realistic performance metrics
 
 ### Testing ✅
 
-Basic test infrastructure:
+6 passing tests covering:
+- Header rendering
+- System type selector buttons
+- Alert panel rendering
+- System type switching
+- Node click → details panel
+- Alert severity filter
 
-1. **App.test.js** - Initial tests
-   - Renders header correctly
-   - Renders system type selector
-   - Uses React Testing Library
+### Build & Tooling ✅
+
+- `npm start` - Development server at localhost:3000
+- `npm run build` - Optimized production build
+- `npm test` - Test suite (6 tests passing)
+- `npm run lint` - ESLint
+- `npm run serve` - Serve production build locally (via npx serve)
 
 ---
 
@@ -138,127 +128,45 @@ Basic test infrastructure:
    - The signature COFM graph from WHITEPAPER.md section 3
    - 3-axis projection (timeline, resources, hierarchy)
    - Critical path highlighting
-   - Would require significant SVG/canvas work
 
-2. **Node Connections** ⚠️
-   - Lines between connected nodes in topology view
-   - Bandwidth and latency visualization
-   - Dependency chains
-
-3. **Interactive Features** ⚠️
-   - Search and filter functionality
-   - Node details panel with metrics
-   - Alert actions (Investigate, Acknowledge, Escalate, Resolve)
-   - Zoom and pan on topology view
-
-4. **Real Metrics Display** ⚠️
-   - Uptime percentages
-   - Throughput graphs
-   - Latency charts
-   - Historical data
+2. **Real-time Updates** ⚠️
+   - WebSocket integration for live data
+   - Polling fallback for metrics refresh
+   - Live alert streaming
 
 ### Medium Priority
 
-1. **Alert Intelligence** ⚠️
-   - Priority scoring algorithm from WHITEPAPER.md section 5
-   - Alert aggregation
-   - Time decay calculation
-   - Impact factor computation
-
-2. **Additional Views** ⚠️
-   - List view
-   - Metrics view
-   - Multiple visualization modes
-
-3. **State Persistence** ⚠️
-   - LocalStorage for user preferences
-   - Session state management
-   - Acknowledged alerts tracking
-
-4. **Performance Optimization** ⚠️
-   - React.memo for complex components
-   - Debounced search
-   - Virtual scrolling for large node lists
+1. **Additional Views** ⚠️ - List view, Metrics view, multiple visualization modes
+2. **State Persistence** ⚠️ - LocalStorage for preferences, acknowledged alerts
+3. **Performance Optimization** ⚠️ - React.memo, virtual scrolling for large node counts
 
 ### Low Priority
 
-1. **Authentication** ⚠️
-   - OAuth2/OIDC integration
-   - Role-based access control
-   - User profiles
-
-2. **WebSocket Integration** ⚠️
-   - Real-time data updates
-   - Live alert streaming
-   - Collaborative features
-
-3. **Backend API** ⚠️
-   - REST API for data persistence
-   - Database integration
-   - Historical data storage
-
-4. **Advanced Features** ⚠️
-   - ML-powered recommendations
-   - Predictive maintenance
-   - Custom dashboards
-   - Export functionality
+1. **Authentication** ⚠️ - OAuth2/OIDC, RBAC, user profiles
+2. **Backend API** ⚠️ - REST API, database integration, historical data
+3. **Advanced Features** ⚠️ - ML recommendations, predictive maintenance, export
 
 ---
 
 ## Known Limitations
 
-1. **Mock Data Only** - All data is generated in-memory, no persistence
-2. **Static Topology** - No real-time updates, manual refresh required
-3. **No Connections** - Nodes are isolated, no relationship visualization
-4. **Limited Interactivity** - Basic click handling only
-5. **No Search/Filter** - Must scan visually
-6. **No Authentication** - Open access, no user management
-7. **Desktop Only** - Not optimized for mobile devices
+1. **Static Metrics** - Metrics are randomly generated per render, not live
+2. **No Authentication** - Open access, no user management
+3. **Desktop Optimized** - Layout not fully responsive for mobile devices
 
 ---
 
 ## How to Run
 
-Now that implementation exists, these commands work:
-
 ```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm start
-
-# Run tests
-npm test
-
-# Build for production
-npm run build
+npm install          # Install dependencies
+npm start            # Development server at localhost:3000
+npm test             # Run test suite
+npm run build        # Create optimized production build
+npm run serve        # Serve production build locally
+npm run lint         # Lint source code
 ```
 
-The application will open at `http://localhost:3000`
-
 ---
 
-## Next Steps
-
-1. **Remove "Production Ready" Badge** - This is still MVP/development status
-2. **Add COFM Visualization** - The signature feature
-3. **Implement Alert Actions** - Make alerts interactive
-4. **Add Node Metrics View** - Real performance data
-5. **Create Tests** - Expand test coverage beyond basic smoke tests
-6. **Documentation Updates** - Update README with accurate current state
-
----
-
-## Technical Debt
-
-1. **CSS Organization** - Consider CSS modules or styled-components
-2. **Component Structure** - Some components could be split further
-3. **PropTypes** - Add runtime type checking
-4. **Error Boundaries** - Add error handling
-5. **Accessibility** - Add ARIA labels and keyboard navigation
-6. **Code Comments** - Add JSDoc documentation
-
----
-
-**Status**: Functional MVP with core features. Many advanced features from whitepaper still pending.
+**Status**: Release Candidate. Core features operational. Advanced features (COFM, real-time, auth) pending for v2.0.

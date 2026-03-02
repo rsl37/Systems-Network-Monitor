@@ -32,7 +32,7 @@ function NodeDetailsPanel({ node, onClose }) {
     <div className="node-details-panel">
       <div className="panel-header">
         <h3>{node.name}</h3>
-        <button className="close-btn" onClick={onClose} aria-label="Close node details">×</button>
+        <button className="close-btn" aria-label="Close node details" onClick={onClose}>×</button>
       </div>
 
       <div className="panel-content">

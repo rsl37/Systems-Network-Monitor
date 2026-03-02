@@ -1,5 +1,4 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import App from './App';
 
 test('renders Systems Network Monitor header', () => {
@@ -45,14 +44,13 @@ test('clicking a node displays the details panel', async () => {
   const nodes = screen.getAllByRole('button');
   const nodeButton = nodes.find(node => node.getAttribute('aria-label')?.includes('Supplier'));
   
-  if (nodeButton) {
-    fireEvent.click(nodeButton);
-    
-    // Check for node details panel elements
-    await waitFor(() => {
-      expect(screen.getByText(/BASIC INFORMATION/i)).toBeInTheDocument();
-    });
-  }
+  expect(nodeButton).toBeDefined();
+  fireEvent.click(nodeButton);
+  
+  // Check for node details panel elements
+  await waitFor(() => {
+    expect(screen.getByText(/BASIC INFORMATION/i)).toBeInTheDocument();
+  });
 });
 
 test('alert filters update alert display', async () => {
