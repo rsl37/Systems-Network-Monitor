@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { generateMockMetrics } from '../utils/mockData';
 import { TrendingUp, TrendingDown, Activity, MapPin, Clock } from 'lucide-react';
 import './NodeDetailsPanel.css';
 
 function NodeDetailsPanel({ node, onClose }) {
   const [actionStatus, setActionStatus] = useState(null);
+
+  useEffect(() => {
+    setActionStatus(null);
+  }, [node?.id]);
 
   if (!node) return null;
 

@@ -37,25 +37,25 @@ function AlertPanel({ systemType }) {
   };
 
   const handleInvestigate = (alertId) => {
-    setAlerts(alerts.map(alert =>
+    setAlerts(prev => prev.map(alert =>
       alert.id === alertId ? { ...alert, investigating: true } : alert
     ));
   };
 
   const handleEscalate = (alertId) => {
-    setAlerts(alerts.map(alert =>
+    setAlerts(prev => prev.map(alert =>
       alert.id === alertId ? { ...alert, escalated: true, acknowledged: true } : alert
     ));
   };
 
   const handleAcknowledge = (alertId) => {
-    setAlerts(alerts.map(alert => 
+    setAlerts(prev => prev.map(alert =>
       alert.id === alertId ? { ...alert, acknowledged: true } : alert
     ));
   };
 
   const handleResolve = (alertId) => {
-    setAlerts(alerts.filter(alert => alert.id !== alertId));
+    setAlerts(prev => prev.filter(alert => alert.id !== alertId));
   };
 
   const getAlertIcon = (severity) => {
@@ -145,27 +145,31 @@ function AlertPanel({ systemType }) {
                 <div className="alert-actions">
                   <button 
                     className={`action-btn investigate${alert.investigating ? ' active' : ''}`}
+                    aria-label={alert.investigating ? 'Under Investigation' : 'Investigate'}
                     title={alert.investigating ? 'Under Investigation' : 'Investigate'}
                     onClick={() => handleInvestigate(alert.id)}
                   >
                     <Eye size={14} />
                   </button>
                   <button 
-                    className="action-btn acknowledge" 
+                    className="action-btn acknowledge"
+                    aria-label="Acknowledge"
                     title="Acknowledge"
                     onClick={() => handleAcknowledge(alert.id)}
                   >
                     <Check size={14} />
                   </button>
                   <button 
-                    className="action-btn escalate" 
+                    className="action-btn escalate"
+                    aria-label="Escalate"
                     title="Escalate"
                     onClick={() => handleEscalate(alert.id)}
                   >
                     <ArrowUpCircle size={14} />
                   </button>
                   <button 
-                    className="action-btn resolve" 
+                    className="action-btn resolve"
+                    aria-label="Resolve"
                     title="Resolve"
                     onClick={() => handleResolve(alert.id)}
                   >

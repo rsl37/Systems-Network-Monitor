@@ -12,6 +12,8 @@ function TopologyView({ systemType, selectedNode, onNodeSelect }) {
   useEffect(() => {
     setNodes(generateMockNodes(systemType));
     setConnections(generateMockConnections(systemType));
+    setSearchTerm('');
+    setFilters({ status: [], type: [] });
   }, [systemType]);
 
   const getStatusColor = (status) => {

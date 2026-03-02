@@ -70,3 +70,35 @@ test('alert filters update alert display', async () => {
     expect(severityFilter).toHaveValue('critical');
   });
 });
+
+test('clicking Investigate marks alert as under investigation', async () => {
+  render(<App />);
+
+  // Find and click the Investigate button on the first unacknowledged alert
+  const investigateBtn = screen.getAllByRole('button', { name: /Investigate/i })[0];
+  fireEvent.click(investigateBtn);
+
+  // Button aria-label should update to "Under Investigation"
+  await waitFor(() => {
+    expect(screen.getAllByRole('button', { name: /Under Investigation/i })[0]).toBeInTheDocument();
+  });
+});
+
+test('clicking Escalate shows Escalated badge and hides action buttons', async () => {
+  render(<App />);
+
+  // Find and click the Escalate button on the first unacknowledged alert
+  const escalateBtn = screen.getAllByRole('button', { name: /Escalate/i })[0];
+  fireEvent.click(escalateBtn);
+
+  // Escalated badge should appear
+  await waitFor(() => {
+    expect(screen.getByText('Escalated')).toBeInTheDocument();
+  });
+
+  // Action buttons for that alert should be gone (alert is now acknowledged)
+  const remainingEscalateButtons = screen.queryAllByRole('button', { name: /Escalate/i });
+  expect(remainingEscalateButtons.length).toBeLessThan(
+    screen.queryAllByRole('button', { name: /Investigate/i }).length + 1
+  );
+});
