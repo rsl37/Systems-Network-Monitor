@@ -49,13 +49,13 @@ function AlertPanel({ systemType, importedAlerts }) {
   };
 
   const handleAcknowledge = (alertId) => {
-    setAlerts(alerts.map(alert => 
+    setAlerts(prev => prev.map(alert =>
       alert.id === alertId ? { ...alert, acknowledged: true } : alert
     ));
   };
 
   const handleResolve = (alertId) => {
-    setAlerts(alerts.filter(alert => alert.id !== alertId));
+    setAlerts(prev => prev.filter(alert => alert.id !== alertId));
   };
 
   const getAlertIcon = (severity) => {
@@ -84,6 +84,9 @@ function AlertPanel({ systemType, importedAlerts }) {
     // Apply sorting
     if (sortBy === 'severity') {
       filtered = [...filtered].sort((a, b) => b.priorityScore - a.priorityScore);
+    } else {
+      // Sort by time: newest first
+      filtered = [...filtered].sort((a, b) => b.timestamp - a.timestamp);
     }
     
     return filtered;
@@ -149,7 +152,8 @@ function AlertPanel({ systemType, importedAlerts }) {
                     <Eye size={14} />
                   </button>
                   <button 
-                    className="action-btn acknowledge" 
+                    className="action-btn acknowledge"
+                    aria-label="Acknowledge"
                     title="Acknowledge"
                     onClick={() => handleAcknowledge(alert.id)}
                   >
@@ -164,7 +168,8 @@ function AlertPanel({ systemType, importedAlerts }) {
                     <ArrowUpCircle size={14} />
                   </button>
                   <button 
-                    className="action-btn resolve" 
+                    className="action-btn resolve"
+                    aria-label="Resolve"
                     title="Resolve"
                     onClick={() => handleResolve(alert.id)}
                   >
@@ -173,10 +178,17 @@ function AlertPanel({ systemType, importedAlerts }) {
                 </div>
               )}
               
-              {alert.acknowledged && (
+              {alert.acknowledged && !alert.escalated && (
                 <div className="alert-acknowledged-badge">
                   <Check size={12} />
                   <span>Acknowledged</span>
+                </div>
+              )}
+
+              {alert.escalated && (
+                <div className="alert-escalated-badge">
+                  <ArrowUpCircle size={12} />
+                  <span>Escalated</span>
                 </div>
               )}
             </div>
