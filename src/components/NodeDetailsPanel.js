@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { generateMockMetrics } from '../utils/mockData';
-import { TrendingUp, TrendingDown, Activity, MapPin, Clock } from 'lucide-react';
+import { generateEdgeAIRecommendations, getRecommendationMeta } from '../utils/edgeAI';
+import { TrendingUp, TrendingDown, Activity, MapPin, Clock, Cpu } from 'lucide-react';
 import './NodeDetailsPanel.css';
 
 function NodeDetailsPanel({ node, onClose }) {
@@ -148,6 +149,32 @@ function NodeDetailsPanel({ node, onClose }) {
                 <span className="activity-desc">System check completed</span>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Edge AI Recommendations Section */}
+        <section className="details-section" aria-label="Edge AI Recommendations">
+          <h4>
+            <Cpu size={13} className="section-icon" />
+            Edge AI Recommendations
+          </h4>
+          <p className="edge-ai-tagline">On-device inference · No cloud · Zero latency</p>
+          <div className="edge-ai-list">
+            {generateEdgeAIRecommendations(node, metrics).map((rec) => {
+              const { label, className } = getRecommendationMeta(rec.priority);
+              return (
+                <div key={rec.id} className={`edge-ai-item ${className}`}>
+                  <div className="edge-ai-item-header">
+                    <span className={`edge-ai-priority-badge ${className}`}>{label}</span>
+                    <span className="edge-ai-category">{rec.category}</span>
+                    <span className="edge-ai-confidence">
+                      {Math.round(rec.confidence * 100)}% confidence
+                    </span>
+                  </div>
+                  <p className="edge-ai-recommendation">{rec.recommendation}</p>
+                </div>
+              );
+            })}
           </div>
         </section>
 

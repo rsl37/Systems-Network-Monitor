@@ -238,6 +238,85 @@
   color: #e0e0e0;
 }
 
+/* Edge AI Recommendations */
+.section-icon {
+  vertical-align: middle;
+  margin-right: 0.35rem;
+  color: #61dafb;
+}
+
+.edge-ai-tagline {
+  font-size: 0.72rem;
+  color: #6b7280;
+  margin: -0.4rem 0 0.75rem 0;
+  letter-spacing: 0.3px;
+}
+
+.edge-ai-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.edge-ai-item {
+  background-color: #1a1f3a;
+  border-radius: 4px;
+  padding: 0.75rem;
+  border-left: 3px solid #2a3f5f;
+}
+
+.edge-ai-item.rec-priority-critical { border-left-color: #ef4444; }
+.edge-ai-item.rec-priority-high     { border-left-color: #f97316; }
+.edge-ai-item.rec-priority-medium   { border-left-color: #fbbf24; }
+.edge-ai-item.rec-priority-low      { border-left-color: #4ade80; }
+.edge-ai-item.rec-priority-info     { border-left-color: #61dafb; }
+
+.edge-ai-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.edge-ai-priority-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+}
+
+.rec-priority-critical .edge-ai-priority-badge,
+.edge-ai-priority-badge.rec-priority-critical { background-color: rgba(239,68,68,0.2); color: #ef4444; }
+.rec-priority-high .edge-ai-priority-badge,
+.edge-ai-priority-badge.rec-priority-high     { background-color: rgba(249,115,22,0.2); color: #f97316; }
+.rec-priority-medium .edge-ai-priority-badge,
+.edge-ai-priority-badge.rec-priority-medium   { background-color: rgba(251,191,36,0.2); color: #fbbf24; }
+.rec-priority-low .edge-ai-priority-badge,
+.edge-ai-priority-badge.rec-priority-low      { background-color: rgba(74,222,128,0.2); color: #4ade80; }
+.rec-priority-info .edge-ai-priority-badge,
+.edge-ai-priority-badge.rec-priority-info     { background-color: rgba(97,218,251,0.2); color: #61dafb; }
+
+.edge-ai-category {
+  font-size: 0.72rem;
+  color: #a0a0a0;
+  flex: 1;
+}
+
+.edge-ai-confidence {
+  font-size: 0.72rem;
+  color: #6b7280;
+  margin-left: auto;
+}
+
+.edge-ai-recommendation {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #e0e0e0;
+  line-height: 1.45;
+}
+
 /* Actions */
 .action-buttons {
   display: flex;
