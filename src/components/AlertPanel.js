@@ -3,20 +3,20 @@ import { generateMockAlerts } from '../utils/mockData';
 import { AlertCircle, AlertTriangle, Info, Check, Eye, ArrowUpCircle, XCircle } from 'lucide-react';
 import './AlertPanel.css';
 
-function AlertPanel({ systemType }) {
+function AlertPanel({ systemType, importedAlerts }) {
   const [alerts, setAlerts] = useState([]);
   const [filter, setFilter] = useState('all'); // 'all', 'critical', 'warning', 'info'
   const [sortBy, setSortBy] = useState('time'); // 'time', 'severity'
 
   useEffect(() => {
-    const mockAlerts = generateMockAlerts(systemType);
+    const rawAlerts = importedAlerts || generateMockAlerts(systemType);
     // Add priority scores to alerts
-    const alertsWithPriority = mockAlerts.map(alert => ({
+    const alertsWithPriority = rawAlerts.map(alert => ({
       ...alert,
       priorityScore: calculatePriorityScore(alert)
     }));
     setAlerts(alertsWithPriority);
-  }, [systemType]);
+  }, [systemType, importedAlerts]);
 
   const calculatePriorityScore = (alert) => {
     // Priority Score = Severity Weight × Impact Factor × Time Decay

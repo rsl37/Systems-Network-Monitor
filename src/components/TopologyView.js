@@ -3,18 +3,23 @@ import { generateMockNodes, generateMockConnections } from '../utils/mockData';
 import SearchBar from './SearchBar';
 import './TopologyView.css';
 
-function TopologyView({ systemType, selectedNode, onNodeSelect }) {
+function TopologyView({ systemType, selectedNode, onNodeSelect, importedNodes, importedConnections }) {
   const [nodes, setNodes] = useState([]);
   const [connections, setConnections] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ status: [], type: [] });
 
   useEffect(() => {
-    setNodes(generateMockNodes(systemType));
-    setConnections(generateMockConnections(systemType));
+    if (importedNodes) {
+      setNodes(importedNodes);
+      setConnections(importedConnections || []);
+    } else {
+      setNodes(generateMockNodes(systemType));
+      setConnections(generateMockConnections(systemType));
+    }
     setFilters({ status: [], type: [] });
     setSearchTerm('');
-  }, [systemType]);
+  }, [systemType, importedNodes, importedConnections]);
 
   const getStatusColor = (status) => {
     switch (status) {

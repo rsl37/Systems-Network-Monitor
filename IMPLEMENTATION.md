@@ -77,6 +77,14 @@
    - Status filters (Operational, Warning, Critical)
    - "Clear All Filters" clears both search and type/status filters
 
+8. **DataUpload** - ETL data import modal (`src/components/DataUpload.js`, `src/utils/etl.js`)
+   - Drag-and-drop or click-to-browse file upload (.json or .csv)
+   - Full Extract-Transform-Load pipeline with field validation and normalisation
+   - Verifies connection/alert node references against the uploaded node list
+   - Live preview: node/connection/alert counts on success, error list on failure
+   - Downloadable JSON and CSV templates (system-type-aware)
+   - "Import Data" button in app header; "Reset to Demo" to return to mock data
+
 ### Data Models ✅
 
 1. **Node** class - id, systemTypeId, name, type, status, location, timestamps
@@ -142,10 +150,9 @@
 
 ## Known Limitations
 
-1. **Mock Data Only** - All data is generated in-memory, no persistence
-2. **Static Metrics** - Metrics are randomly generated per render, not live
-3. **No Authentication** - Open access, no user management
-4. **Desktop Optimized** - Layout not fully responsive for mobile devices
+1. **Static Metrics** - Metrics are randomly generated per render, not live
+2. **No Authentication** - Open access, no user management
+3. **Desktop Optimized** - Layout not fully responsive for mobile devices
 
 ---
 
