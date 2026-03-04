@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
+import { generateEdgeAIRecommendations } from './utils/edgeAI';
 
 test('renders Systems Network Monitor header', () => {
   render(<App />);
@@ -99,4 +100,63 @@ test('clicking Escalate shows Escalated badge and hides action buttons', async (
   expect(remainingEscalateButtons.length).toBeLessThan(
     screen.queryAllByRole('button', { name: /Investigate/i }).length + 1
   );
+});
+
+// ── Edge AI unit tests ────────────────────────────────────────────────────────
+
+test('edgeAI: returns failover recommendation for critical node', () => {
+  const node = { id: 'n1', name: 'Factory 2', type: 'manufacturer', status: 'critical', location: 'Vietnam' };
+  const metrics = { uptime: 60, throughput: 400, latency: 30 };
+  const recs = generateEdgeAIRecommendations(node, metrics);
+  expect(recs.some(r => r.id === 'rec-failover')).toBe(true);
+  const failover = recs.find(r => r.id === 'rec-failover');
+  expect(failover.priority).toBe('critical');
+  expect(failover.confidence).toBeGreaterThanOrEqual(0.9);
+});
+
+test('edgeAI: returns urgent maintenance recommendation when uptime < 90', () => {
+  const node = { id: 'n2', name: 'Supplier B', type: 'supplier', status: 'warning', location: 'Tokyo' };
+  const metrics = { uptime: 82, throughput: 800, latency: 40 };
+  const recs = generateEdgeAIRecommendations(node, metrics);
+  expect(recs.some(r => r.id === 'rec-maintenance')).toBe(true);
+});
+
+test('edgeAI: returns latency recommendation when latency > 80ms', () => {
+  const node = { id: 'n3', name: 'ZLA Center', type: 'center', status: 'warning', location: 'Los Angeles' };
+  const metrics = { uptime: 97, throughput: 900, latency: 125 };
+  const recs = generateEdgeAIRecommendations(node, metrics);
+  expect(recs.some(r => r.id === 'rec-latency')).toBe(true);
+});
+
+test('edgeAI: returns healthy signal for perfectly operational node', () => {
+  const node = { id: 'n4', name: 'JFK Tower', type: 'tower', status: 'operational', location: 'New York' };
+  const metrics = { uptime: 99, throughput: 900, latency: 20 };
+  const recs = generateEdgeAIRecommendations(node, metrics);
+  expect(recs.some(r => r.id === 'rec-healthy')).toBe(true);
+  expect(recs[0].priority).toBe('info');
+});
+
+test('edgeAI: returns empty array for null inputs', () => {
+  expect(generateEdgeAIRecommendations(null, null)).toEqual([]);
+  expect(generateEdgeAIRecommendations(null, {})).toEqual([]);
+});
+
+test('Edge AI Recommendations panel appears when a node is selected', async () => {
+  render(<App />);
+
+  // Click a node
+  const nodes = screen.getAllByRole('button');
+  const nodeButton = nodes.find(n => n.getAttribute('aria-label')?.includes('Supplier'));
+  expect(nodeButton).toBeDefined();
+  fireEvent.click(nodeButton);
+
+  // The section heading should appear
+  await waitFor(() => {
+    expect(screen.getByText(/Edge AI Recommendations/i)).toBeInTheDocument();
+  });
+
+  // The tagline should confirm on-device inference
+  await waitFor(() => {
+    expect(screen.getByText(/On-device inference/i)).toBeInTheDocument();
+  });
 });

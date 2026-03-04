@@ -35,6 +35,7 @@ For installation and quick start instructions, see README.md. For data model sch
 ### Technology Stack
 
 **Frontend**: React 18 with functional components and hooks, Lucide React iconography, SVG rendering, CSS3  
+**Edge AI Engine**: On-device rule-based inference (`src/utils/edgeAI.js`) — all reasoning runs in the browser with zero network calls, ensuring instant decisions, data privacy, and offline reliability  
 **Data Layer**: In-memory state management (React useState/useEffect). Future: WebSocket for real-time, REST API for persistence  
 **Deployment**: Static site generation for edge deployment, CDN distribution, container-ready (Docker/Kubernetes)
 
@@ -162,7 +163,41 @@ For alert data schemas and action tracking, see ERD.md sections on Alert and Ale
 
 -----
 
-## 9. Future Directions
+## 9. Edge AI Architecture
+
+### Design Philosophy
+
+Edge AI means doing the thinking, the data processing, the decisions, and the analysis right on the device — not sending data to the cloud. For SNM this is not merely a nice-to-have: it is an architectural requirement dictated by three operational realities:
+
+1. **Instant decisions** — Supply chain rerouting and ATC coordination cannot wait for round-trip cloud latency. The inference engine must respond in microseconds.
+2. **Privacy and safety** — Node metrics and operational telemetry are sensitive. No operator data ever leaves the device.
+3. **Reliable operation** — Systems that must work in degraded-network environments (remote facilities, air-gapped data centers) cannot depend on cloud connectivity.
+
+### Implementation
+
+The Edge AI engine lives entirely in `src/utils/edgeAI.js` and runs synchronously in the browser. It exposes two pure functions:
+
+- `generateEdgeAIRecommendations(node, metrics)` — returns a prioritised list of actionable recommendations (with confidence scores) derived from the node's status, uptime, latency, throughput, and type.
+- `getRecommendationMeta(priority)` — maps a priority level to display label and CSS class.
+
+NodeDetailsPanel calls the engine on every render of a selected node, producing instant, privacy-preserving recommendations without any network request.
+
+### Recommendation Categories
+
+| Category | Trigger condition |
+|---|---|
+| Resilience | Node in `critical` status |
+| Maintenance | Uptime < 97 % |
+| Performance | Latency > 80 ms or low throughput |
+| Capacity | Throughput > 1 500 units/hr |
+| Risk Management | High-dependency node (`manufacturer`, `tracon`) in `warning` state |
+| Status | Node healthy with no anomalies |
+
+Recommendations are sorted by priority (critical → high → medium → low → info) then by confidence score, so operators always see the most urgent action first.
+
+-----
+
+## 10. Future Directions
 
 ### Machine Learning Integration
 

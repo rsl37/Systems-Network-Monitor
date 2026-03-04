@@ -77,7 +77,14 @@
    - Status filters (Operational, Warning, Critical)
    - "Clear All Filters" clears both search and type/status filters
 
-8. **DataUpload** - ETL data import modal (`src/components/DataUpload.js`, `src/utils/etl.js`)
+8. **EdgeAI** - On-device recommendation engine (`src/utils/edgeAI.js`)
+   - Generates context-sensitive, prioritised recommendations from node status and metrics
+   - Runs entirely in the browser — no cloud calls, zero-latency, fully offline-capable
+   - Integrated into NodeDetailsPanel as "Edge AI Recommendations" section
+   - Recommendation categories: Resilience, Maintenance, Performance, Capacity, Risk Management, Status
+   - Each recommendation carries a confidence score (0–100 %)
+
+9. **DataUpload** - ETL data import modal (`src/components/DataUpload.js`, `src/utils/etl.js`)
    - Drag-and-drop or click-to-browse file upload (.json or .csv)
    - Full Extract-Transform-Load pipeline with field validation and normalisation
    - Verifies connection/alert node references against the uploaded node list
@@ -144,7 +151,7 @@
 
 1. **Authentication** ⚠️ - OAuth2/OIDC, RBAC, user profiles
 2. **Backend API** ⚠️ - REST API, database integration, historical data
-3. **Advanced Features** ⚠️ - ML recommendations, predictive maintenance, export
+3. **Advanced Features** ⚠️ - ML predictive maintenance (rule-based Edge AI engine is implemented; statistical ML models pending), export
 
 ---
 
