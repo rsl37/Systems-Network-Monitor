@@ -160,3 +160,111 @@ test('Edge AI Recommendations panel appears when a node is selected', async () =
     expect(screen.getByText(/On-device inference/i)).toBeInTheDocument();
   });
 });
+
+// ── Multi-view analysis tests ─────────────────────────────────────────────────
+
+test('view tabs are rendered (Topology, List, Metrics, COFM)', () => {
+  render(<App />);
+  expect(screen.getByRole('tab', { name: /Topology/i })).toBeInTheDocument();
+  expect(screen.getByRole('tab', { name: /List/i })).toBeInTheDocument();
+  expect(screen.getByRole('tab', { name: /Metrics/i })).toBeInTheDocument();
+  expect(screen.getByRole('tab', { name: /COFM/i })).toBeInTheDocument();
+});
+
+test('clicking List tab renders the node table', async () => {
+  render(<App />);
+  const listTab = screen.getByRole('tab', { name: /List/i });
+  fireEvent.click(listTab);
+  await waitFor(() => {
+    expect(screen.getByRole('table', { name: /Node list/i })).toBeInTheDocument();
+  });
+  // Table column headings visible (use role to avoid text+sort-indicator mismatch)
+  expect(screen.getByRole('columnheader', { name: /Name/i })).toBeInTheDocument();
+  expect(screen.getByRole('columnheader', { name: /Type/i })).toBeInTheDocument();
+  expect(screen.getByRole('columnheader', { name: /Status/i })).toBeInTheDocument();
+  expect(screen.getByRole('columnheader', { name: /Location/i })).toBeInTheDocument();
+});
+
+test('clicking a row in List view selects the node and shows details', async () => {
+  render(<App />);
+  // Switch to list view
+  fireEvent.click(screen.getByRole('tab', { name: /List/i }));
+  // Find a node row
+  await waitFor(() => {
+    expect(screen.getByRole('table', { name: /Node list/i })).toBeInTheDocument();
+  });
+  const rows = screen.getAllByRole('button').filter(el =>
+    el.getAttribute('aria-label')?.includes('supplier') || el.getAttribute('aria-label')?.includes('Supplier')
+  );
+  expect(rows.length).toBeGreaterThan(0);
+  fireEvent.click(rows[0]);
+  await waitFor(() => {
+    expect(screen.getByText(/BASIC INFORMATION/i)).toBeInTheDocument();
+  });
+});
+
+test('clicking Metrics tab renders status summary cards', async () => {
+  render(<App />);
+  fireEvent.click(screen.getByRole('tab', { name: /Metrics/i }));
+  await waitFor(() => {
+    expect(screen.getByText('Total Nodes')).toBeInTheDocument();
+  });
+  // Use getAllByText to handle multiple matches (e.g. alert filter dropdown also has "Warning")
+  expect(screen.getAllByText(/^Operational$/i).length).toBeGreaterThanOrEqual(1);
+  expect(screen.getAllByText(/^Warning$/i).length).toBeGreaterThanOrEqual(1);
+  expect(screen.getAllByText(/^Critical$/i).length).toBeGreaterThanOrEqual(1);
+});
+
+test('clicking COFM tab renders the COFM visualization SVG', async () => {
+  render(<App />);
+  fireEvent.click(screen.getByRole('tab', { name: /COFM/i }));
+  await waitFor(() => {
+    expect(screen.getByRole('img', { name: /COFM visualization/i })).toBeInTheDocument();
+  });
+});
+
+// ── generateCOFMData unit tests ───────────────────────────────────────────────
+
+test('generateCOFMData enriches nodes with COFM fields', () => {
+  const { generateMockNodes, generateCOFMData } = require('./utils/mockData');
+  const nodes = generateMockNodes('supply-chain');
+  const cofm  = generateCOFMData(nodes);
+  expect(cofm.length).toBe(nodes.length);
+  cofm.forEach(n => {
+    expect(typeof n.cofmDay).toBe('number');
+    expect(typeof n.cofmResource).toBe('number');
+    expect(typeof n.wbsRadius).toBe('number');
+    expect(typeof n.wbsLevel).toBe('number');
+    expect(typeof n.onCriticalPath).toBe('boolean');
+  });
+});
+
+test('generateCOFMData marks critical and warning nodes as onCriticalPath', () => {
+  const { generateMockNodes, generateCOFMData } = require('./utils/mockData');
+  const nodes = generateMockNodes('supply-chain');
+  const cofm  = generateCOFMData(nodes);
+  const factory2 = cofm.find(n => n.id === 'sc-4'); // critical
+  const supplierB = cofm.find(n => n.id === 'sc-2'); // warning
+  expect(factory2.onCriticalPath).toBe(true);
+  expect(supplierB.onCriticalPath).toBe(true);
+});
+
+test('generateCOFMData gives manufacturers a larger wbsRadius than retail nodes', () => {
+  const { generateMockNodes, generateCOFMData } = require('./utils/mockData');
+  const nodes = generateMockNodes('supply-chain');
+  const cofm  = generateCOFMData(nodes);
+  const manufacturer = cofm.find(n => n.type === 'manufacturer');
+  const retail       = cofm.find(n => n.type === 'retail');
+  expect(manufacturer.wbsRadius).toBeGreaterThan(retail.wbsRadius);
+});
+
+test('generateCOFMData cofmResource is higher for critical nodes than operational ones of same type', () => {
+  const { generateMockNodes, generateCOFMData } = require('./utils/mockData');
+  const nodes = generateMockNodes('supply-chain');
+  const cofm  = generateCOFMData(nodes);
+  const criticalMfr    = cofm.find(n => n.type === 'manufacturer' && n.status === 'critical');
+  const operationalMfr = cofm.find(n => n.type === 'manufacturer' && n.status === 'operational');
+  if (criticalMfr && operationalMfr) {
+    expect(criticalMfr.cofmResource).toBeGreaterThan(operationalMfr.cofmResource);
+  }
+});

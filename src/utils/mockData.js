@@ -1,5 +1,74 @@
 // Mock data generation for development
 
+// WBS hierarchy metadata: node size (r) and organisational level
+const WBS_HIERARCHY = {
+  // Supply-chain roles (level 1 = highest importance)
+  manufacturer: { level: 1, r: 26 },
+  distributor:  { level: 2, r: 20 },
+  supplier:     { level: 3, r: 16 },
+  warehouse:    { level: 3, r: 16 },
+  retail:       { level: 4, r: 12 },
+  // ATC roles
+  center:  { level: 1, r: 26 },
+  tracon:  { level: 2, r: 20 },
+  tower:   { level: 3, r: 16 },
+};
+
+// Gantt timeline (day range) and resource-intensity baseline per node type
+const COFM_PLANNING = {
+  // Supply chain – upstream types start earlier on the timeline
+  supplier:     { dayRange: [0,  3],  resourceBase: 3 },
+  manufacturer: { dayRange: [3,  7],  resourceBase: 5 },
+  distributor:  { dayRange: [6,  9],  resourceBase: 4 },
+  warehouse:    { dayRange: [8, 11],  resourceBase: 3 },
+  retail:       { dayRange: [10, 14], resourceBase: 2 },
+  // ATC – towers first, then TRACONs, then centres
+  tower:  { dayRange: [0, 3],  resourceBase: 3 },
+  tracon: { dayRange: [3, 7],  resourceBase: 5 },
+  center: { dayRange: [6, 11], resourceBase: 6 },
+};
+
+const STATUS_RESOURCE_BOOST = { critical: 4, warning: 2, operational: 0 };
+
+/**
+ * Enrich a node list with COFM positioning data.
+ *
+ * Returned fields per node:
+ *   cofmDay      – planned maintenance day (Gantt / X-axis)
+ *   cofmResource – resource intensity 1-10 (Scatterplot / Y-axis)
+ *   wbsRadius    – circle radius proportional to WBS hierarchy
+ *   wbsLevel     – hierarchy depth (1 = most important)
+ *   onCriticalPath – true when node is critical or warning (PERT highlight)
+ *
+ * @param {Array}  nodes   – result of generateMockNodes()
+ * @returns {Array}
+ */
+export function generateCOFMData(nodes) {
+  return nodes.map((node) => {
+    const planning  = COFM_PLANNING[node.type]  || { dayRange: [0, 7], resourceBase: 3 };
+    const hierarchy = WBS_HIERARCHY[node.type]  || { level: 3, r: 15 };
+
+    // Spread nodes of the same type evenly across their day range
+    const peers   = nodes.filter((n) => n.type === node.type);
+    const peerIdx = peers.indexOf(node);
+    const [dayStart, dayEnd] = planning.dayRange;
+    const span  = dayEnd - dayStart;
+    const step  = span / Math.max(peers.length, 1);
+    const cofmDay = Math.round((dayStart + step * peerIdx + step / 2) * 10) / 10;
+
+    const cofmResource = Math.min(10, planning.resourceBase + (STATUS_RESOURCE_BOOST[node.status] ?? 0));
+
+    return {
+      ...node,
+      cofmDay,
+      cofmResource,
+      wbsRadius: hierarchy.r,
+      wbsLevel:  hierarchy.level,
+      onCriticalPath: node.status === 'critical' || node.status === 'warning',
+    };
+  });
+}
+
 export function generateMockNodes(systemType) {
   if (systemType === 'supply-chain') {
     return [
